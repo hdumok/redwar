@@ -1,0 +1,65 @@
+import { Application } from 'egg';
+import { DATE, DECIMAL, INTEGER, STRING } from 'sequelize';
+import Sequelize = require('sequelize');
+
+export enum AdminRole {
+  Admin = 'admin'
+}
+
+export interface AdminAttributes {
+  id?: number;
+  role?: AdminRole,
+  name?: string,
+  account?: string,
+  password?: string,
+  token?: string,
+  updated?: string | Date | null;
+  created?: string | Date | null;
+  deleted?: string | Date | null;
+}
+
+export interface AdminInstance extends Sequelize.Instance<AdminAttributes>, AdminAttributes{
+  id: number;
+  role: AdminRole,
+  name: string,
+  account: string,
+  password: string,
+  token: string,
+  updated: string | Date | null;
+  created: string | Date | null;
+  deleted: string | Date | null;
+}
+
+interface AdminModel extends Sequelize.Model<AdminInstance, AdminAttributes>{
+}
+export default (app: Application) => {
+
+  const model = app.model.define(
+    'admin',
+    {
+      id: { type: INTEGER, primaryKey: true },
+      role: { type: STRING(128), allowNull: false, defaultValue: '' },
+      name: { type: STRING(255), allowNull: false, defaultValue: '' },
+      account: {
+        type: STRING(255),
+        allowNull: false,
+        defaultValue: '',
+        unique: true
+      },
+      password: { type: STRING(255), allowNull: false, defaultValue: '' },
+      token: { type: STRING(255), allowNull: false, defaultValue: '' },
+      updated: { type: DATE, allowNull: true },
+      created: { type: DATE, allowNull: true },
+      deleted: { type: DATE, allowNull: true }
+    },
+    {
+      tableName: app.config.prefix + 'admin'
+    }
+  ) as AdminModel;
+
+  // model.sync({
+  //   force: app.config.env === 'unittest'
+  // });
+
+  return model;
+};

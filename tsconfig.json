@@ -1,0 +1,38 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
+    "strict": true, // 启用所有严格类型检查选项
+    "noImplicitAny": false, // 在表达式和声明上有隐含的 any类型时报错
+    "noImplicitThis": false,  //不允许this隐式为any
+    "alwaysStrict": true,  // 以严格模式检查每个模块，并在每个文件里加入 'use strict'
+    "charset": "utf8",
+    "allowJs": false, //运行编译js
+    "pretty": true,
+    "noEmitOnError": false,
+    "noUnusedLocals": false, //若有未使用的局部变量则抛错。
+    "noUnusedParameters": false, //若有未使用的参数则抛错。
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "strictPropertyInitialization": false,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "inlineSourceMap": true,
+    "importHelpers": true,
+    "removeComments": true,  //编译后的代码移除注释
+    "strictNullChecks": true, //不允许null、undefined赋值给其他类型
+    "noImplicitReturns": true, //不允许隐式的return
+    "preserveConstEnums": true, //保留 const和 enum声明。
+    "experimentalDecorators": true, // 启用装饰器
+    "emitDecoratorMetadata": true, // 为装饰器提供元数据的支持
+  },
+  "exclude": [
+    "app/public",
+    "app/views",
+    "thinkjs",
+    "coverage",
+    "node_modules*"
+  ]
+}

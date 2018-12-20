@@ -820,7 +820,7 @@ export default class PacketController extends Controller {
       this.logger.error('分红出错', e, packet);
     }
   }
-  
+
   private async packetExpired (packet_id) {
     const { ctx } = this;
     let packet = await ctx.model.Packet.findByPk(packet_id, {

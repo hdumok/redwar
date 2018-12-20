@@ -7,7 +7,6 @@ logs/
 .vscode
 yarn-error.log
 *.swp
-*.lock
 *.js
 *.log
 app/**/*.js

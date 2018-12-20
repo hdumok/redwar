@@ -1,20 +1,12 @@
 
-import { Service } from 'egg';
-
-  // AWARD_PARENT: [0.08, 0.08, 0.08, 0.06, 0.03, 0.03, 0.03],
-  // AWARD_1030_VALUE: 1.11,
-  // AWARD_1030_LEI: [0, 0, 0, 3.33, 6.66, 26.66, 66.66, 166.66],
-  // AWARD_3060_VALUE: 6.66,
-  // AWARD_3060_LEI: [0, 0, 0, 6.66, 18.88, 66.66, 166.66, 888],
-  // DURATION: 60000
+import { Context, Service } from 'egg';
 
 interface AwardConfig {
   spical: number,
   lei: number[],
 }
 
-export default class RuleService extends Service {
-
+export default class ConfigService extends Service {
   private packet_duration = 60;
   private award_present: number[] = [0.08, 0.08, 0.08, 0.06, 0.03, 0.03, 0.03];
   private award_1030: AwardConfig = {
@@ -59,7 +51,7 @@ export default class RuleService extends Service {
 
     return this.award_3060;
   }
-  private async getCacheConfig (key){
+  private async getCacheConfig (key) {
     let config = await this.ctx.app.cache.get(key, async () => {
       try {
         await this.ctx.model.Config.findOne({

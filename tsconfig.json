@@ -31,6 +31,7 @@
   "exclude": [
     "app/public",
     "app/views",
+    "game",
     "thinkjs",
     "coverage",
     "node_modules*"

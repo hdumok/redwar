@@ -39,7 +39,6 @@ export interface WithdrawInstance
 
 interface WithdrawModel
   extends Sequelize.Model<WithdrawInstance, WithdrawAttributes> {
-  test (): Promise<any>;
 }
 
 export default (app: Application) => {

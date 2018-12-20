@@ -1,19 +1,17 @@
-// This file was auto created by egg-ts-helper
+// This file is created by egg-ts-helper
 // Do not modify this file!!!!!!!!!
 
-import 'egg'; // Make sure ts to import egg declaration at first
-import Config from '../../../app/service/config';
-import Excel from '../../../app/service/excel';
-import Rule from '../../../app/service/rule';
-import Session from '../../../app/service/session';
-import Sms from '../../../app/service/sms';
+import 'egg';
+import ExportConfig from '../../../app/service/config';
+import ExportRule from '../../../app/service/rule';
+import ExportSession from '../../../app/service/session';
+import ExportSms from '../../../app/service/sms';
 
 declare module 'egg' {
   interface IService {
-    config: Config;
-    excel: Excel;
-    rule: Rule;
-    session: Session;
-    sms: Sms;
+    config: ExportConfig;
+    rule: ExportRule;
+    session: ExportSession;
+    sms: ExportSms;
   }
 }

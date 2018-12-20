@@ -1,6 +1,6 @@
 'use strict';
 
-import { Context, Service } from 'egg';
+import { Service } from 'egg';
 
 export default class SessionService extends Service {
   private store = this.app.redis.clients.get('session');

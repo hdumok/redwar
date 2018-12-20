@@ -1,6 +1,7 @@
 
 import { Application } from 'egg';
 import { DATE, INTEGER } from 'sequelize';
+
 import Sequelize = require('sequelize');
 
 export interface RelationAttributes {
@@ -34,7 +35,6 @@ export interface RelationInstance extends Sequelize.Instance<RelationAttributes>
 }
 
 interface RelationModel extends Sequelize.Model<RelationInstance, RelationAttributes>{
-  test (): Promise<any>
 }
 
 
@@ -62,7 +62,7 @@ export default (app: Application) => {
   ) as RelationModel;
 
   model.associate = () => {
-    app.model.Recharge.belongsTo(app.model.User, { constraints: false });
+    app.model.Relation.belongsTo(app.model.User, { constraints: false });
   };
 
   // model.sync({

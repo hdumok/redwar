@@ -1,27 +1,27 @@
-// This file was auto created by egg-ts-helper
+// This file is created by egg-ts-helper
 // Do not modify this file!!!!!!!!!
 
-import 'egg'; // Make sure ts to import egg declaration at first
-import ManageRoom from '../../../app/controller/manage/room';
-import PlayerPacket from '../../../app/controller/player/packet';
-import PlayerRecharge from '../../../app/controller/player/recharge';
-import PlayerRoom from '../../../app/controller/player/room';
-import PlayerTransaction from '../../../app/controller/player/transaction';
-import PlayerUser from '../../../app/controller/player/user';
-import PlayerWithdraw from '../../../app/controller/player/withdraw';
+import 'egg';
+import ExportManageRoom from '../../../app/controller/manage/room';
+import ExportPlayerPacket from '../../../app/controller/player/packet';
+import ExportPlayerRecharge from '../../../app/controller/player/recharge';
+import ExportPlayerRoom from '../../../app/controller/player/room';
+import ExportPlayerTransaction from '../../../app/controller/player/transaction';
+import ExportPlayerUser from '../../../app/controller/player/user';
+import ExportPlayerWithdraw from '../../../app/controller/player/withdraw';
 
 declare module 'egg' {
   interface IController {
     manage: {
-      room: ManageRoom;
-    };
+      room: ExportManageRoom;
+    }
     player: {
-      packet: PlayerPacket;
-      recharge: PlayerRecharge;
-      room: PlayerRoom;
-      transaction: PlayerTransaction;
-      user: PlayerUser;
-      withdraw: PlayerWithdraw;
-    };
+      packet: ExportPlayerPacket;
+      recharge: ExportPlayerRecharge;
+      room: ExportPlayerRoom;
+      transaction: ExportPlayerTransaction;
+      user: ExportPlayerUser;
+      withdraw: ExportPlayerWithdraw;
+    }
   }
 }

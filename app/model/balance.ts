@@ -1,5 +1,6 @@
 import { Application } from 'egg';
 import { DATE, DECIMAL, INTEGER, STRING } from 'sequelize';
+
 import Sequelize = require('sequelize');
 
 export interface BalanceAttributes {
@@ -23,7 +24,6 @@ interface BalanceModel extends Sequelize.Model<BalanceInstance, BalanceAttribute
 }
 
 export default (app: Application) => {
-  const { INTEGER, DECIMAL, STRING } = app.Sequelize;
 
   const model = app.model.define(
     'balance',

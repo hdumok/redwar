@@ -106,7 +106,7 @@ export default {
         message[0] = '%s';
       }
 
-      message = util.format.apply(null, message);
+      message = util.format.apply(null, message as any) as any;
     }
     message = (message as any).replace(/%s|%d/g, '').trim();
 

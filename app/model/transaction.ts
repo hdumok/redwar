@@ -1,11 +1,12 @@
 import { Application } from 'egg';
 import { DATE, DECIMAL, INTEGER, STRING } from 'sequelize';
-import Sequelize = require('sequelize');
 import { PacketAttributes, PacketInstance } from './packet';
 import { RechargeAttributes, RechargeInstance } from './recharge';
 import { RoomAttributes, RoomInstance } from './room';
 import { UserAttributes, UserInstance } from './user';
 import { WithdrawAttributes, WithdrawInstance } from './withdraw';
+
+import Sequelize = require('sequelize');
 
 export enum TransactionValue {
   Normal = '',
@@ -103,7 +104,6 @@ export interface TransactionInstance
 
 interface TransactionModel
   extends Sequelize.Model<TransactionInstance, TransactionAttributes> {
-  test (): Promise<any>;
 }
 
 export default (app: Application) => {

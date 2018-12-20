@@ -15,7 +15,7 @@ const plugin: EggPlugin = {
   },
   sessionRedis: {
     enable: true,
-    package: 'egg-session-redis',
+    package: 'egg-session-redis'
   },
   validate: {
     enable: true,

@@ -28,7 +28,7 @@
     ],
 
     "adjacent-overload-signatures": true, // 定义函数时如果用到了覆写，则必须将覆写的函数写到一起
-    "return-undefined": true, // 使用 return; 而不是 return undefined;
+ 
     "curly": [true, "ignore-same-line"], // if 后面必须有 {，除非是单行 if
     "forin": true, // for in 内部必须有 hasOwnProperty
     "no-empty": [true, "allow-empty-catch"], // 禁止出现空代码块，允许 catch 是空代码块
@@ -73,6 +73,7 @@
         "allow-destructuring": true
       }
     ],
+    "return-undefined": false, // 使用 return; 而不是 return undefined;
     "no-unbound-method": false, // 使用实例的方法时，必须 bind 到实例上
     "no-object-literal-type-assertion": false,
     "no-reference": false, // 禁止 <reference path=>

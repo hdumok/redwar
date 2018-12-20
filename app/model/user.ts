@@ -1,9 +1,10 @@
 import { Application } from 'egg';
 import { DATE, DECIMAL, INTEGER, STRING } from 'sequelize';
-import Sequelize = require('sequelize');
 import { RechargeInstance } from './recharge';
 import { RelationAttributes, RelationInstance } from './relation';
 import { WithdrawInstance } from './withdraw';
+
+import Sequelize = require('sequelize');
 
 export enum UserStatus {
   Normal = 0,

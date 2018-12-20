@@ -1,11 +1,11 @@
-// This file was auto created by egg-ts-helper
+// This file is created by egg-ts-helper
 // Do not modify this file!!!!!!!!!
 
-import 'egg'; // Make sure ts to import egg declaration at first
-import Interface from '../../../app/middleware/interface';
+import 'egg';
+import ExportInterface from '../../../app/middleware/interface';
 
 declare module 'egg' {
   interface IMiddleware {
-    interface: typeof Interface;
+    interface: typeof ExportInterface;
   }
 }

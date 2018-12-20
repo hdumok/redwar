@@ -43,7 +43,7 @@ export default function (options: EggAppConfig['interface'], app: Application): 
         ctx.fail(
           ctx.code.invalid_param,
           app.config.env !== 'prod' ? err.errors : null,
-          app.config.env !== 'prod' ? err.errors[0].field + ': ' + err.errors[0].code : err.errors[0].field);
+          app.config.env !== 'prod' ? err.errors[0].field + ': ' + err.errors[0].code + ', ' + err.errors[0].message : err.errors[0].field);
         return;
       }
 

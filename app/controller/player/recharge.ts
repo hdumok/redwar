@@ -158,7 +158,7 @@ export default class RechargeController extends Controller {
       return;
     }
 
-    recharge.user.award = recharge.award + recharge.cost_award;
+    recharge.user.award = ctx.helper.Decimal(recharge.award + recharge.cost_award);
     recharge.status = status;
 
     let transaction: TransactionInstance;

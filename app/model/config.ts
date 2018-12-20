@@ -1,5 +1,6 @@
 import { Application } from 'egg';
 import { DATE, DECIMAL, INTEGER, JSONB, STRING} from 'sequelize';
+
 import Sequelize = require('sequelize');
 
 export interface ConfigAttributes {
@@ -23,7 +24,6 @@ export interface ConfigInstance extends Sequelize.Instance<ConfigAttributes>, Co
 }
 
 interface ConfigModel extends Sequelize.Model<ConfigInstance, ConfigAttributes>{
-  test (): Promise<any>
 }
 
 export default (app: Application) => {

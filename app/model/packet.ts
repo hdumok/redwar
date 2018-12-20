@@ -1,8 +1,9 @@
 import { Application } from 'egg';
 import { DATE, DECIMAL, INTEGER, JSONB, STRING } from 'sequelize';
-import Sequelize = require('sequelize');
 import { RoomAttributes, RoomInstance } from './room';
 import { UserAttributes, UserInstance } from './user';
+
+import Sequelize = require('sequelize');
 
 export enum PacketNumber {
   Back = 0,
@@ -34,6 +35,7 @@ export interface PacketAttributes {
   lei_count?: number,
   turns?: number;
   all_turns?: number;
+  opened?: number;
   finished?: string | Date | null;
   updated?: string | Date | null;
   created?: string | Date | null;
@@ -58,6 +60,7 @@ export interface PacketInstance
   lei_count: number,
   turns: number;
   all_turns: number;
+  opened: number;
   finished: string | Date | null;
   updated: string | Date | null;
   created: string | Date | null;
@@ -69,7 +72,6 @@ export interface PacketInstance
 
 interface PacketModel
   extends Sequelize.Model<PacketInstance, PacketAttributes> {
-  test (): Promise<any>;
 }
 
 export default (app: Application) => {
@@ -88,6 +90,7 @@ export default (app: Application) => {
       lei_count: { type: INTEGER, allowNull: false, defaultValue: 0 },
       turns: { type: INTEGER, allowNull: false, defaultValue: 0 },
       all_turns: { type: INTEGER, allowNull: false, defaultValue: 0 },
+      opened: { type: INTEGER, allowNull: false, defaultValue: 0 },
       finished: { type: DATE, allowNull: true },
       updated: { type: DATE, allowNull: true },
       created: { type: DATE, allowNull: true },

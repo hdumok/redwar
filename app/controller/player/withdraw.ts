@@ -42,7 +42,7 @@ export default class WithdrawController extends Controller {
       return;
     }
 
-    user.award = user.award - award;
+    user.award = ctx.helper.Decimal(user.award - award);
 
     //存数据库的订单信息
     let withdraw: WithdrawAttributes = {
@@ -55,7 +55,7 @@ export default class WithdrawController extends Controller {
     let transaction: TransactionAttributes = {
       type: TransactionType.Withdraw,
       user_id: user.id,
-      cost_award: 0 - award,
+      cost_award: -award,
       award: user.award,
       remark: `${user.name} 申请提现 ${award} 红包, 扣除后，用户当前红包数 ${user.award}`
     };

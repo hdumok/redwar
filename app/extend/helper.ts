@@ -2,11 +2,8 @@ import * as crypto from 'crypto';
 import * as moment from 'moment';
 
 export default {
-  AString (num: number): string {
-    return parseFloat(Number(num).toFixed(2)).toFixed(2);
-  },
 
-  ANumber (num: number): number {
+  Decimal (num: number): number {
     return parseFloat(Number(num).toFixed(2));
   },
 

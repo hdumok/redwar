@@ -3,12 +3,27 @@
 export default (app) => {
 
   app.beforeStart(async () => {
+    // 应用会等待这个函数执行完成才启动
 
     await app.model.sync({
       force: app.config.env === 'unittest'
     });
 
     if (app.config.env === 'unittest'){
+
+      app.model.Config.bulkCreate([
+        { id: 1, key: 'packet_duration', value: 60},
+        { id: 2, key: 'award_present', value: [0.08, 0.08, 0.08, 0.06, 0.03, 0.03, 0.03]},
+        { id: 3, key: 'award_1030', value: {
+            spical: 1.11,
+            lei: [0, 0, 0, 3.33, 6.66, 26.66, 66.66, 166.66]
+          }
+        },
+        { id: 4, key: 'award_3060', value: {
+            spical: 6.66,
+            lei: [0, 0, 0, 6.66, 18.88, 66.66, 166.66, 888]
+        }}
+      ]);
       app.model.Admin.create({
         id: 1,
         role: 'admin',

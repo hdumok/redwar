@@ -103,8 +103,7 @@ export default (appInfo: EggAppInfo) => {
 
   config.customLogger = {
     scheduleLogger: {
-      dir: appInfo.baseDir + '/logs/',
-      file: 'schedule.log',
+      file: appInfo.baseDir + '/logs/' + 'schedule.log',
       consoleLevel: 'DEBUG'
     },
   };

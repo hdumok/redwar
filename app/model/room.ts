@@ -1,5 +1,6 @@
 import { Application } from 'egg';
 import { DATE, DECIMAL, INTEGER, STRING } from 'sequelize';
+
 import Sequelize = require('sequelize');
 
 export enum RoomStatus {
@@ -31,7 +32,6 @@ export interface RoomInstance extends Sequelize.Instance<RoomAttributes>, RoomAt
 }
 
 interface RoomModel extends Sequelize.Model<RoomInstance, RoomAttributes>{
-  test (): Promise<any>
 }
 export default (app: Application) => {
 

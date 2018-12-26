@@ -1,0 +1,31 @@
+
+syntax = "proto3";
+
+package redwar;
+
+// The request message containing the user's name.
+message SendRequest {
+  required int32 room_id = 1;
+  required int32 award = 2;
+  required int32 lei = 3;
+}
+
+message OpenRequest {
+  required int32 id = 1;
+}
+
+// The response message containing the greetings
+message Response {
+  int32 code = 1;
+  string message = 2;
+  string data = 3;
+}
+
+// The greeting service definition.
+service Packet {
+  // Sends a greeting
+  rpc Send (SendRequest) returns (Response) {}
+  rpc Open (OpenRequest) returns (Response) {}
+}
+
+

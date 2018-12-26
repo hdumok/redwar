@@ -1,14 +1,6 @@
-import { Context, Controller } from 'egg';
-import {
-  RechargeAttributes,
-  RechargeInstance,
-  RechargeStatus
-} from '../../model/recharge';
-import {
-  TransactionAttributes,
-  TransactionInstance,
-  TransactionType
-} from '../../model/transaction';
+import { Controller } from 'egg';
+import { RechargeStatus } from '../../model/recharge';
+import { TransactionInstance, TransactionType } from '../../model/transaction';
 
 export default class RechargeController extends Controller {
   /**

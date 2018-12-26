@@ -19,7 +19,31 @@ export default {
     return this.jsonLogger;
   },
 
-  async auth (phone: string, code: string): Promise<boolean> {
+  get code () {
+    return this.app.config.interface;
+  },
+
+  get user (){
+    return this.session.user;
+  },
+
+  set user (data){
+    this.session.user = data;
+    return;
+  },
+
+  async auth (phone: string, code: string, init?: boolean): Promise<boolean> {
+
+    if (!!init){
+      this.session.auth = {
+        phone: phone,
+        code: code,
+        error: 0, //错误次数
+        time: Date.now()
+      };
+      return true;
+    }
+
     const auth = this.session.auth;
     if (!auth) {
       this.fail('请先获取验证码');
@@ -125,30 +149,6 @@ export default {
     //对参数进行过滤处理
     if (filter) {
       data = pick(data, Object.keys(rules));
-    }
-
-    //默认值 default 的级别最高
-    for (let key in rules) {
-      if (rules.hasOwnProperty(key)) continue;
-
-      let rule = rules[key];
-      rule.required = rule.required === false ? false : true;
-
-      if (!rule.hasOwnProperty('default')) continue;
-
-      let has = data.hasOwnProperty(key);
-      if (has && data[key] !== '') continue;
-      if (!has && rule.required) continue;
-
-      if (rule.default === '') {
-        rule.allowEmpty = true;
-      }
-
-      if (rule.default === undefined) {
-        delete data[key];
-      } else {
-        data[key] = rule.default;
-      }
     }
 
     this.validate(rules, data);

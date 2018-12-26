@@ -14,7 +14,7 @@
     "test-local": "egg-bin test -r egg-ts-helper/register",
     "test": "npm run lint -- && npm run test-local",
     "cov": "egg-bin cov -r egg-ts-helper/register",
-    "tsc": "ets && tsc -p tsconfig.json ",
+    "tsc": "ets && tsc -p tsconfig.json",
     "ci": "npm run lint && npm run cov && npm run tsc",
     "lint": "tslint --project . -c tslint.json --fix",
     "clean": "ets clean"
@@ -33,6 +33,8 @@
     "egg-bin": "^4.6.2",
     "egg-cache": "^0.0.5",
     "egg-cors": "^2.1.1",
+    "egg-grpc": "^1.0.3",
+    "egg-grpc-server": "^1.7.0",
     "egg-json-logger": "^1.1.5",
     "egg-mock": "^3.16.0",
     "egg-redis": "^2.0.0",
@@ -43,6 +45,7 @@
     "egg-ts-helper": "^1.11.0",
     "egg-validate": "^2.0.2",
     "egg-view-nunjucks": "^2.2.0",
+    "grpc": "^1.17.0",
     "ioredis": "^4.2.0",
     "lodash": "^4.17.11",
     "moment": "^2.22.2",
@@ -60,6 +63,10 @@
   "ci": {
     "version": "8"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hdumok/redwar"
+  },
+  "author": "hdumok",
   "license": "MIT"
 }

@@ -6,6 +6,7 @@
 * sequelize model 和 ts 的 interface 结合使用
 * 单元测试的编写
 * 日志JSON化
+* 支持GRPC
 
 ### Npm Scripts
 

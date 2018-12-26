@@ -6,7 +6,6 @@ export default function (options: EggAppConfig['interface'], app: Application): 
 
   return async (ctx: Context, next: () => Promise<void>) => {
 
-    ctx.code = options;
     try {
 
       let path = ctx.path.split('/').filter((p) => p.length > 0);

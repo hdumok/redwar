@@ -1,6 +1,5 @@
 import { Controller } from 'egg';
 import { pick } from 'lodash';
-import { RelationInstance } from '../../model/relation';
 import { TransactionType } from '../../model/transaction';
 
 export default class UserController extends Controller {
@@ -298,12 +297,7 @@ export default class UserController extends Controller {
       return;
     }
 
-    ctx.session.auth = {
-      phone: account,
-      code: code,
-      error: 0, //错误次数
-      time: Date.now()
-    };
+    await ctx.auth(account, code, true);
 
     ctx.success(
       ctx.app.config.env !== 'prod' ? { code } : null,
@@ -432,9 +426,8 @@ export default class UserController extends Controller {
    */
   public async logout () {
     const { ctx } = this;
-    this.logger.info('清空用户缓存', ctx.session.user, ctx.session.auth);
+    this.logger.info('清空用户缓存', ctx.session.user);
     ctx.session.user = null;
-    ctx.session.auth = null;
     ctx.success();
   }
 

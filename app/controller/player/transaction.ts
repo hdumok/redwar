@@ -11,6 +11,40 @@ export default class RoomController extends Controller {
    * @apiSuccess {Number}  code 0
    * @apiSuccess {String}  message 提示语
    * @apiSuccess {Object}  data 数据
+   * @apiSuccessExample {json} Success-Response:
+   * {
+   *   "code": 0,
+   *   "message": "",
+   *   "data": [
+   *     {
+   *       "id": 950,
+   *       "type": 2,
+   *       "user_id": 3,
+   *       "cost_award": 67.7, //红包净变化 有正有负
+   *       "award": 811.29, //变化后的红包值红包
+   *       "remark": "发包者 昵称 回收剩余 5 个红包 67.7",
+   *       "created": "2018-09-20 22:19:40"
+   *     },
+   *     {
+   *       "id": 949,
+   *       "type": 1,
+   *       "user_id": 3,
+   *       "cost_award": 15.79,
+   *       "award": 743.59,
+   *       "remark": "用户 昵称 抢包 15.79",
+   *       "created": "2018-09-20 22:18:39"
+   *     },
+   *     {
+   *       "id": 940,
+   *       "type": 0,
+   *       "user_id": 3,
+   *       "cost_award": -100,
+   *       "award": 727.8,
+   *       "remark": "用户 昵称 在 红包扫雷房间1 发包 100 雷点 7",
+   *       "created": "2018-09-20 22:18:37"
+   *     },
+   *   ]
+   * }
    * @apiError {Number}  code 错误码
    * @apiError {String}  message 提示语
    * @apiError {Object}  data 数据

@@ -1,6 +1,5 @@
-import * as Promise from 'bluebird';
 import { Controller } from 'egg';
-import { pick, sum } from 'lodash';
+import { pick } from 'lodash';
 import { PacketAward, PacketNumber, PacketStatus } from '../../model/packet';
 import { TransactionType, TransactionValue } from '../../model/transaction';
 
@@ -15,6 +14,47 @@ export default class PacketController extends Controller {
    * @apiSuccess {Number}  code 0
    * @apiSuccess {String}  message 提示语
    * @apiSuccess {Object}  data 数据
+   * @apiSuccessExample {json} Success-Response:
+   * {
+   *   "code": 200,
+   *   "message": "",
+   *   "data": {
+   *     "id": 1,
+   *     "status": 2,
+   *     "base_award": 100,
+   *     "award": 76.3,
+   *     "lei": 5,
+   *     "turns": 2,
+   *     "all_turns": 7,
+   *     "created": "2018-11-26T15:33:23.473Z",
+   *     "finished": "2018-11-26T15:34:23.473Z",
+   *     "user": {
+   *       "id": 2,
+   *       "name": "修改的名称",
+   *       "headimgurl": ""
+   *     },
+   *     "roomer": [
+   *       {
+   *         "id": 1,
+   *         "name": "房间名称",
+   *         "headimgurl": "",
+   *         "value": "",
+   *         "packet_award": 2.03,
+   *         "created": "2018-11-26T15:33:23.799Z"
+   *       }
+   *     ],
+   *     "player": [
+   *       {
+   *         "id": 2,
+   *         "name": "修改的名称",
+   *         "headimgurl": "",
+   *         "value": "豹子",
+   *         "packet_award": 23.7,
+   *         "created": "2018-11-26T15:33:23.861Z"
+   *       }
+   *     ]
+   *   }
+   * }
    * @apiError {Number}  code 错误码
    * @apiError {String}  message 提示语
    * @apiError {Object}  data 数据
@@ -262,7 +302,7 @@ export default class PacketController extends Controller {
     //红包队列
     packet.packet_items = await ctx.service.rule.createPackets(award, lei);
 
-    this.logger.info('红包信息', packet);
+    this.logger.info('红包信息', packet.get({plain: true}));
 
     // 发包记录
     let transaction = ctx.model.Transaction.build({
@@ -274,7 +314,7 @@ export default class PacketController extends Controller {
       remark: `用户 ${user.name} 在 ${room.name} 发包 ${award} 雷点 ${lei}`
     });
 
-    this.logger.info('发包记录', transaction);
+    this.logger.info('发包记录', transaction.get({plain: true}));
 
     try {
       await ctx.model.transaction(async (t) => {
@@ -553,7 +593,7 @@ export default class PacketController extends Controller {
       ctx.fail('操作失败, 请稍后再试');
     }
   }
-  private async packetMutliLei (packet_id) {
+  private async packetMutliLei (packet_id: number) {
     //多雷奖励
     const { ctx } = this;
 
@@ -626,7 +666,7 @@ export default class PacketController extends Controller {
     });
   }
 
-  private async packetToRoom (packet_id) {
+  private async packetToRoom (packet_id: number) {
     const { ctx } = this;
 
     let packet = await ctx.model.Packet.findByPk(packet_id, {
@@ -708,7 +748,7 @@ export default class PacketController extends Controller {
     }
   }
 
-  private async packetPresent (packet_id){
+  private async packetPresent (packet_id: number){
 
     const { ctx } = this;
 
@@ -749,8 +789,9 @@ export default class PacketController extends Controller {
     let relation = await ctx.model.Relation.findOne({
        where: { user_id: packet.user_id }
      });
-    this.logger.info('给发包者的上级关系', relation);
     if (!relation) return;
+
+    this.logger.info('给发包者的上级关系', relation.get({plain: true}));
 
     let transaction = ctx.model.Transaction.build({
       type: TransactionType.RoomPresent,
@@ -817,11 +858,11 @@ export default class PacketController extends Controller {
         await transaction.save({ transaction: t });
       });
     } catch (e) {
-      this.logger.error('分红出错', e, packet);
+      this.logger.error('分红出错', e, packet.get({plain: true}));
     }
   }
 
-  private async packetExpired (packet_id) {
+  private async packetExpired (packet_id: number) {
     const { ctx } = this;
     let packet = await ctx.model.Packet.findByPk(packet_id, {
       include: [

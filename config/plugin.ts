@@ -32,6 +32,14 @@ const plugin: EggPlugin = {
   cache: {
     enable: true,
     package: 'egg-cache'
+  },
+  grpc: {
+    enable: true,
+    package: 'egg-grpc',
+  },
+  grpcServer: {
+    enable: true,
+    package: 'egg-grpc-server',
   }
 };
 

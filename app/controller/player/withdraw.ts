@@ -1,10 +1,10 @@
 
 
-import { Context, Controller } from 'egg';
-import { pick } from 'lodash';
+import { Controller } from 'egg';
 import { TransactionAttributes, TransactionType} from '../../model/transaction';
-import { UserAttributes, UserInstance } from '../../model/user';
 import { WithdrawAttributes } from '../../model/withdraw';
+
+import decimal = require('decimal102');
 export default class WithdrawController extends Controller {
 
   /**
@@ -42,7 +42,7 @@ export default class WithdrawController extends Controller {
       return;
     }
 
-    user.award = ctx.helper.Decimal(user.award - award);
+    user.award = decimal(user.award - award);
 
     //存数据库的订单信息
     let withdraw: WithdrawAttributes = {

@@ -3,6 +3,8 @@ import { pick } from 'lodash';
 import { PacketAward, PacketNumber, PacketStatus } from '../../model/packet';
 import { TransactionType, TransactionValue } from '../../model/transaction';
 
+import decimal = require('decimal102');
+
 export default class PacketController extends Controller {
   /**
    * @api {post} /player/packet 红包详情
@@ -326,7 +328,7 @@ export default class PacketController extends Controller {
 
         //用户当前红包更新
         await user.reload({ transaction: t });
-        user.award = ctx.helper.Decimal(user.award - packet.base_award);
+        user.award = decimal(user.award - packet.base_award);
         await user.save({ transaction: t });
 
         //发包记录
@@ -489,7 +491,7 @@ export default class PacketController extends Controller {
         case TransactionValue.Lei:
           if (packet.user_id !== transaction.user_id) {
             //抢包者中雷，赔付的值
-            transaction.lei_award = -ctx.helper.Decimal(1.5 * packet.base_award);
+            transaction.lei_award = -decimal(1.5 * packet.base_award);
             transaction.remark = `用户 ${user.name} 中雷 ${packet.lei} 赔付 ${
               transaction.lei_award
             }`;
@@ -505,7 +507,7 @@ export default class PacketController extends Controller {
           }`;
       }
       transaction.packet_award = packet_item.award;
-      transaction.cost_award = ctx.helper.Decimal(packet_item.award + transaction.spical_award + transaction.lei_award);
+      transaction.cost_award = decimal(packet_item.award + transaction.spical_award + transaction.lei_award);
 
       try {
         await ctx.model.transaction(async (t) => {
@@ -522,23 +524,23 @@ export default class PacketController extends Controller {
           //玩家特殊牌,友房主奖励发包者
           if (transaction.spical_award) {
             //实际上 spical_award 是正的
-            packet.room.award = ctx.helper.Decimal(packet.room.award - Math.abs(transaction.spical_award));
-            packet.user.award = ctx.helper.Decimal(packet.user.award + Math.abs(transaction.spical_award));
+            packet.room.award = decimal(packet.room.award - Math.abs(transaction.spical_award));
+            packet.user.award = decimal(packet.user.award + Math.abs(transaction.spical_award));
           }
           //玩家中雷,直接赔钱, 给发包者
           if (transaction.lei_award) {
             //实际上 lei_award 是负的
-            packet.user.award = ctx.helper.Decimal(packet.user.award + Math.abs(transaction.lei_award));
+            packet.user.award = decimal(packet.user.award + Math.abs(transaction.lei_award));
           }
 
           //如果是自己抢了自己的红包
           if (user.id === packet.user.id){
-            user.award = ctx.helper.Decimal(user.award + transaction.cost_award);
+            user.award = decimal(user.award + transaction.cost_award);
             transaction.award = user.award;
             await user.save({ transaction: t });
           }
           else {
-            packet.user.award = ctx.helper.Decimal(packet.user.award + transaction.cost_award);
+            packet.user.award = decimal(packet.user.award + transaction.cost_award);
             transaction.award = packet.user.award;
           }
           transaction.room_award = packet.room.award;
@@ -553,7 +555,7 @@ export default class PacketController extends Controller {
           packet.turns = transaction.turns;
 
           if (transaction.packet_award) {
-            packet.award = ctx.helper.Decimal(packet.award - transaction.packet_award);
+            packet.award = decimal(packet.award - transaction.packet_award);
           }
 
           //记录抽红包的人
@@ -653,8 +655,8 @@ export default class PacketController extends Controller {
         await packet.room.reload({ transaction: t });
         await packet.user.reload({ transaction: t });
 
-        packet.user.award = ctx.helper.Decimal(packet.user.award + cost_award);
-        packet.room.award = ctx.helper.Decimal(packet.room.award - cost_award);
+        packet.user.award = decimal(packet.user.award + cost_award);
+        packet.room.award = decimal(packet.room.award - cost_award);
 
         transaction.room_award = packet.room.award;
         transaction.award = packet.user.award;
@@ -722,11 +724,11 @@ export default class PacketController extends Controller {
 
         //房主的交易和红包更新
         await packet.room.reload({ transaction: t });
-        packet.room.award = ctx.helper.Decimal(packet.room.award + transaction.cost_award);
+        packet.room.award = decimal(packet.room.award + transaction.cost_award);
         await packet.room.save({ transaction: t });
 
         //红包本身的更新
-        packet.award = ctx.helper.Decimal(packet.award - transaction.packet_award);
+        packet.award = decimal(packet.award - transaction.packet_award);
         await packet.save({ transaction: t });
 
         //发包交易的更新
@@ -829,7 +831,7 @@ export default class PacketController extends Controller {
         room_id: packet.room_id,
         packet_id: packet.id,
         base_award: packet.base_award,
-        cost_award: ctx.helper.Decimal(award_present[i] * room_packet.packet_award)
+        cost_award: decimal(award_present[i] * room_packet.packet_award)
       });
       parent_transaction.remark = `${packet.user.name} 发包, 给第 ${i + 1} 级 分红 ${parent_transaction.cost_award}`;
       this.logger.info(parent_transaction);
@@ -845,13 +847,13 @@ export default class PacketController extends Controller {
           });
           if (!user) continue;
 
-          user.award = ctx.helper.Decimal(user.award + parent_transaction.cost_award);
+          user.award = decimal(user.award + parent_transaction.cost_award);
           await user.save({ transaction: t });
 
           parent_transaction.award = user.award;
           await parent_transaction.save({ transaction: t });
 
-          transaction.cost_award = ctx.helper.Decimal(transaction.cost_award - parent_transaction.cost_award);
+          transaction.cost_award = decimal(transaction.cost_award - parent_transaction.cost_award);
         }
 
         transaction.remark = `房主抢包 ${transaction.packet_award}, 分红给发包者上级共 ${Math.abs(transaction.cost_award)}`;
@@ -911,7 +913,7 @@ export default class PacketController extends Controller {
 
         //用户余额
         await packet.user.reload({ transaction: t });
-        packet.user.award = ctx.helper.Decimal(packet.user.award + packet.award);
+        packet.user.award = decimal(packet.user.award + packet.award);
         await packet.user.save({ transaction: t });
 
         //发包后, 备份用户的 红包值

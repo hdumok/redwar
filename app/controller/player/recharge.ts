@@ -2,6 +2,8 @@ import { Controller } from 'egg';
 import { RechargeStatus } from '../../model/recharge';
 import { TransactionInstance, TransactionType } from '../../model/transaction';
 
+import decimal = require('decimal102');
+
 export default class RechargeController extends Controller {
   /**
    * @api {get} /player/recharge/balance 充值选项查看
@@ -150,7 +152,7 @@ export default class RechargeController extends Controller {
       return;
     }
 
-    recharge.user.award = ctx.helper.Decimal(recharge.award + recharge.cost_award);
+    recharge.user.award = decimal(recharge.award + recharge.cost_award);
     recharge.status = status;
 
     let transaction: TransactionInstance;

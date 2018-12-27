@@ -2,6 +2,8 @@
 import { Service } from 'egg';
 import { TransactionValue } from '../model/transaction';
 
+import decimal = require('decimal102');
+
 interface PacketItem {
   turns: number,
   award: number
@@ -25,7 +27,7 @@ export default class RuleService extends Service {
     array[num - 1] = award;
 
     for (let i = 0; i < num - 1; i++) {
-      array[i] = this.ctx.helper.Decimal(award * array[i] / sum);
+      array[i] = decimal(award * array[i] / sum);
 
       //首包不能为0
       if (i === 0) {
@@ -34,7 +36,7 @@ export default class RuleService extends Service {
         }
       }
 
-      array[num - 1] = this.ctx.helper.Decimal(array[num - 1] - array[i]);
+      array[num - 1] = decimal(array[num - 1] - array[i]);
     }
 
     return array.map((award, index) => ({
@@ -67,7 +69,7 @@ export default class RuleService extends Service {
 
     let value = TransactionValue.Normal;
 
-    let array = this.ctx.helper.Decimal(award).toFixed(2).replace('.', '').split('');
+    let array = decimal(award).toFixed(2).replace('.', '').split('');
 
     //中雷
     if (String(lei) === array[array.length - 1]) {

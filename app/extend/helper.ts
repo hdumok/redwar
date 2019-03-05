@@ -2,59 +2,45 @@ import * as crypto from 'crypto';
 import * as moment from 'moment';
 
 export default {
-
-  //实际没使用这个函数
-  Decimal (num: number): number {
+  // 实际没使用这个函数
+  Decimal(num: number): number {
     return parseFloat(Number(num).toFixed(2));
   },
 
-  getDate (time: number | string = Date.now()): string {
+  getDate(time: number | string = Date.now()): string {
     return moment(new Date(time)).format('GGGG-MM-DD');
   },
 
-  getDateTime (time: number | string = Date.now()): string {
+  getDateTime(time: number | string = Date.now()): string {
     return moment(new Date(time)).format('GGGG-MM-DD HH:mm:ss');
   },
 
-  getDayStart (time: number | string = Date.now()): number {
+  getDayStart(time: number | string = Date.now()): number {
     return new Date(time).setHours(0, 0, 0, 0);
   },
 
-  getDayEnd (time: number | string = Date.now()): number {
-    return new Date(new Date(time).getTime() + 24 * 3600 * 1000).setHours(
-      0,
-      0,
-      0,
-      0
-    );
+  getDayEnd(time: number | string = Date.now()): number {
+    return new Date(new Date(time).getTime() + 24 * 3600 * 1000).setHours(0, 0, 0, 0);
   },
 
-  getDayRang (time: number | string = Date.now()): any {
+  getDayRang(time: number | string = Date.now()): any {
     return {
       $gte: new Date(time).setHours(0, 0, 0, 0),
-      $lte: new Date(new Date(time).getTime() + 24 * 3600 * 1000).setHours(
-        0,
-        0,
-        0,
-        0
-      )
+      $lte: new Date(new Date(time).getTime() + 24 * 3600 * 1000).setHours(0, 0, 0, 0),
     };
   },
 
-  thisMonth (): number {
+  thisMonth(): number {
     return new Date(new Date().setDate(1)).setHours(0, 0, 0, 0);
   },
 
-  lastMonth (): number {
-    return new Date(
-      new Date(new Date().setMonth(new Date().getMonth() - 1)).setDate(1)
-    ).setHours(0, 0, 0, 0);
+  lastMonth(): number {
+    return new Date(new Date(new Date().setMonth(new Date().getMonth() - 1)).setDate(1)).setHours(0, 0, 0, 0);
   },
 
-  getNoceStr (length): string {
-    let chars =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let maxPos = chars.length;
+  getNoceStr(length): string {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const maxPos = chars.length;
     let noceStr = '';
     for (let i = 0; i < (length || 32); i++) {
       noceStr += chars.charAt(Math.floor(Math.random() * maxPos));
@@ -62,7 +48,7 @@ export default {
     return noceStr;
   },
 
-  getRandom (n = 0): string {
+  getRandom(n = 0): string {
     let num = '';
     for (let i = 0; i < n; i++) {
       num += Math.floor(Math.random() * 10);
@@ -70,22 +56,22 @@ export default {
     return num;
   },
 
-  getDuration (started, finished = Date.now()): number {
+  getDuration(started, finished = Date.now()): number {
     return (new Date(finished).getTime() - new Date(started).getTime()) / 1000;
   },
 
-  getOrderId (id = 0): string {
+  getOrderId(id = 0): string {
     return moment().format('GGMMDDHHmmss') + this.getRandom(3);
   },
 
-  getUid (id: number): number {
-    return id + 124800;
-  },
-  md5 (str: string): string {
-    return crypto.createHash('md5').update(str + '').digest('hex');
+  md5(str: string): string {
+    return crypto
+      .createHash('md5')
+      .update(str + '')
+      .digest('hex');
   },
 
-  parseObj (value, defaultValue = {}): any {
+  parseObj(value, defaultValue = {}): any {
     if (!value || value === '{}') {
       return defaultValue;
     }
@@ -107,12 +93,12 @@ export default {
     return value;
   },
 
-  stringifyObj (value, defaultValue = {}): string {
+  stringifyObj(value, defaultValue = {}): string {
     if (!value) {
       value = defaultValue;
     }
 
-    //如果传过来就字符串，可能被序列化过了，也可能有问题
+    // 如果传过来就字符串，可能被序列化过了，也可能有问题
     if (typeof value === 'string') {
       try {
         value = JSON.parse(value);
@@ -124,5 +110,5 @@ export default {
     }
 
     return JSON.stringify(value);
-  }
+  },
 };

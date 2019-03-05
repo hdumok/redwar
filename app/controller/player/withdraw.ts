@@ -1,12 +1,9 @@
-
-
 import { Controller } from 'egg';
-import { TransactionAttributes, TransactionType} from '../../model/transaction';
+import { TransactionAttributes, TransactionType } from '../../model/transaction';
 import { WithdrawAttributes } from '../../model/withdraw';
 
 import decimal = require('decimal102');
 export default class WithdrawController extends Controller {
-
   /**
    * @api {post} /player/withdraw/submit 提现订单提交
    * @apiGroup Recharge
@@ -23,15 +20,15 @@ export default class WithdrawController extends Controller {
    *   "data": null
    * }
    */
-  public async submit () {
-    let rule = {
-      award: { type: 'number', mix: 0}
+  public async submit() {
+    const rule = {
+      award: { type: 'number', mix: 0 },
     };
 
     const { ctx } = this;
     const { award } = ctx.validater(rule);
 
-    let user = await ctx.model.User.findByPk(ctx.session.user.id);
+    const user = await ctx.model.User.findByPk(ctx.session.user.id);
     if (!user) {
       ctx.fail(ctx.code.unlogin);
       return;
@@ -44,32 +41,32 @@ export default class WithdrawController extends Controller {
 
     user.award = decimal(user.award - award);
 
-    //存数据库的订单信息
+    // 存数据库的订单信息
     let withdraw: WithdrawAttributes = {
       user_id: user.id,
       cost_award: award,
       award: user.award,
-      remark: `${ctx.helper.getDateTime()} ${user.name} 申请提现。`
+      remark: `${ctx.helper.getDateTime()} ${user.name} 申请提现。`,
     };
 
-    let transaction: TransactionAttributes = {
+    const transaction: TransactionAttributes = {
       type: TransactionType.Withdraw,
       user_id: user.id,
       cost_award: -award,
       award: user.award,
-      remark: `${user.name} 申请提现 ${award} 红包, 扣除后，用户当前红包数 ${user.award}`
+      remark: `${user.name} 申请提现 ${award} 红包, 扣除后，用户当前红包数 ${user.award}`,
     };
 
     try {
-      await ctx.model.transaction(async (t) => {
+      await ctx.model.transaction(async t => {
         if (!user) throw new Error('数据异常');
-        //提现记录
-        withdraw = await ctx.model.Withdraw.create(withdraw as any, {transaction: t});
+        // 提现记录
+        withdraw = await ctx.model.Withdraw.create(withdraw as any, { transaction: t });
         transaction.withdraw_id = withdraw.id;
-        //流水记录
-        await ctx.model.Transaction.create(transaction as any, {transaction: t});
-        //用户扣款
-        await user.save({transaction: t});
+        // 流水记录
+        await ctx.model.Transaction.create(transaction as any, { transaction: t });
+        // 用户扣款
+        await user.save({ transaction: t });
       });
     } catch (e) {
       this.logger.error('操作失败, 请稍后再试', e);

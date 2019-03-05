@@ -3,7 +3,7 @@ import { pick } from 'lodash';
 import * as util from 'util';
 
 export default {
-  get logger () {
+  get logger() {
     if (this.app.config.env === 'local') {
       return this.getLogger('logger');
     }
@@ -11,7 +11,7 @@ export default {
     return this.jsonLogger;
   },
 
-  get coreLogger () {
+  get coreLogger() {
     if (this.app.config.env === 'local') {
       return this.getLogger('logger');
     }
@@ -19,27 +19,26 @@ export default {
     return this.jsonLogger;
   },
 
-  get code () {
+  get code() {
     return this.app.config.interface;
   },
 
-  get user (){
+  get user() {
     return this.session.user;
   },
 
-  set user (data){
+  set user(data) {
     this.session.user = data;
     return;
   },
 
-  async auth (phone: string, code: string, init?: boolean): Promise<boolean> {
-
-    if (!!init){
+  async auth(phone: string, code: string, init?: boolean): Promise<boolean> {
+    if (!!init) {
       this.session.auth = {
-        phone: phone,
-        code: code,
-        error: 0, //错误次数
-        time: Date.now()
+        phone,
+        code,
+        error: 0, // 错误次数
+        time: Date.now(),
       };
       return true;
     }
@@ -75,9 +74,8 @@ export default {
     return true;
   },
 
-  success (data?, ...message) {
-
-    let status = this.code.success;
+  success(data?, ...message) {
+    const status = this.code.success;
     if (typeof data === 'string') {
       message.unshift(data);
       data = null;
@@ -87,18 +85,16 @@ export default {
 
     this.body = {
       code: status.code,
-      message: message,
-      data: data === undefined ? null : data
+      message,
+      data: data === undefined ? null : data,
     };
   },
 
-  fail (code?: any, data?: any, ...message) {
-
+  fail(code?: any, data?: any, ...message) {
     let status = this.code.fail;
     if (code && code.code) {
       status = code;
-    }
-    else {
+    } else {
       if (typeof data === 'string' || typeof data === 'number') {
         message.unshift(data);
       }
@@ -114,18 +110,18 @@ export default {
 
     this.body = {
       code: status.code,
-      message: message,
-      data: data === undefined ? null : data
+      message,
+      data: data === undefined ? null : data,
     };
   },
 
-  createMessage (status?: any, ...message) {
+  createMessage(status?: any, ...message) {
     if (message.length === 0) {
       message = status.message;
     } else {
       message.unshift(status.message);
 
-      //存在多个message, 并且第一个message不是字符串模板，转换成默认模板
+      // 存在多个message, 并且第一个message不是字符串模板，转换成默认模板
       if (!/%s|%d/.test(message[0])) {
         message[0] = '%s';
       }
@@ -137,8 +133,8 @@ export default {
     return message;
   },
 
-  validater (rules, data?, filter?) {
-    //预处理
+  validater(rules, data?, filter?) {
+    // 预处理
     if (typeof data === 'boolean') {
       filter = data;
       data = { ...this.request.body };
@@ -146,7 +142,7 @@ export default {
       data = { ...(data || this.request.body) };
     }
 
-    //对参数进行过滤处理
+    // 对参数进行过滤处理
     if (filter) {
       data = pick(data, Object.keys(rules));
     }
@@ -154,5 +150,5 @@ export default {
     this.validate(rules, data);
 
     return data;
-  }
+  },
 };

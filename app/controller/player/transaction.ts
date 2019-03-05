@@ -49,40 +49,32 @@ export default class RoomController extends Controller {
    * @apiError {String}  message 提示语
    * @apiError {Object}  data 数据
    */
-  public async index () {
+  public async index() {
     const { ctx } = this;
 
-    let rule = {
+    const rule = {
       limit: { type: 'number', required: false, default: 10 },
       time: {
         type: 'string',
         required: false,
-        default: new Date(Date.now() + 10 * 1000)
-      }
+        default: new Date(Date.now() + 10 * 1000),
+      },
     };
 
     const { limit, time } = ctx.validater(rule);
 
-    let user = ctx.session.user;
+    const user = ctx.session.user;
 
-    let transactions = await ctx.model.Transaction.findAll({
+    const transactions = await ctx.model.Transaction.findAll({
       where: {
         user_id: user.id,
         created: {
-          $lt: new Date(time)
-        }
+          $lt: new Date(time),
+        },
       },
-      attributes: [
-        'id',
-        'type',
-        'user_id',
-        'cost_award',
-        'award',
-        'remark',
-        'created'
-      ],
-      order: [['created', 'desc']],
-      limit: limit
+      attributes: [ 'id', 'type', 'user_id', 'cost_award', 'award', 'remark', 'created' ],
+      order: [[ 'created', 'desc' ]],
+      limit,
     });
 
     ctx.success(transactions);

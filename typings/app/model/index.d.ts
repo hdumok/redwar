@@ -10,6 +10,7 @@ import ExportPacket from '../../../app/model/packet';
 import ExportRecharge from '../../../app/model/recharge';
 import ExportRelation from '../../../app/model/relation';
 import ExportRoom from '../../../app/model/room';
+import ExportSequence from '../../../app/model/sequence';
 import ExportTransaction from '../../../app/model/transaction';
 import ExportUser from '../../../app/model/user';
 import ExportWithdraw from '../../../app/model/withdraw';
@@ -24,6 +25,7 @@ declare module 'sequelize' {
     Recharge: ReturnType<typeof ExportRecharge>;
     Relation: ReturnType<typeof ExportRelation>;
     Room: ReturnType<typeof ExportRoom>;
+    Sequence: ReturnType<typeof ExportSequence>;
     Transaction: ReturnType<typeof ExportTransaction>;
     User: ReturnType<typeof ExportUser>;
     Withdraw: ReturnType<typeof ExportWithdraw>;

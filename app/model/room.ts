@@ -6,12 +6,12 @@ import Sequelize = require('sequelize');
 export enum RoomStatus {
   Normal = 0,
   Top = 1,
-  Hide = 2
+  Hide = 2,
 }
 
 export interface RoomAttributes {
-  id?: number;
-  status?: RoomStatus,
+  id?: string;
+  status?: RoomStatus;
   name?: string;
   headimgurl?: string;
   award?: number;
@@ -20,9 +20,9 @@ export interface RoomAttributes {
   deleted?: string | Date | null;
 }
 
-export interface RoomInstance extends Sequelize.Instance<RoomAttributes>, RoomAttributes{
-  id: number;
-  status: RoomStatus,
+export interface RoomInstance extends Sequelize.Instance<RoomAttributes>, RoomAttributes {
+  id: string;
+  status: RoomStatus;
   name: string;
   headimgurl: string;
   award: number;
@@ -31,25 +31,23 @@ export interface RoomInstance extends Sequelize.Instance<RoomAttributes>, RoomAt
   deleted: string | Date | null;
 }
 
-interface RoomModel extends Sequelize.Model<RoomInstance, RoomAttributes>{
-}
+interface RoomModel extends Sequelize.Model<RoomInstance, RoomAttributes> {}
 export default (app: Application) => {
-
   const model = app.model.define(
     'room',
     {
-      id: { type: INTEGER, primaryKey: true, autoIncrement: true },
+      id: { type: STRING, primaryKey: true },
       status: { type: INTEGER, allowNull: false, defaultValue: 0 },
       name: { type: STRING(255), allowNull: false, defaultValue: '' },
       headimgurl: { type: STRING(255), allowNull: false, defaultValue: '' },
       award: { type: DECIMAL(10, 2), allowNull: false, defaultValue: 0 },
       updated: { type: DATE, allowNull: true },
       created: { type: DATE, allowNull: true },
-      deleted: { type: DATE, allowNull: true }
+      deleted: { type: DATE, allowNull: true },
     },
     {
-      tableName: app.config.prefix + 'room'
-    }
+      tableName: app.config.prefix + 'room',
+    },
   ) as RoomModel;
 
   // model.sync({

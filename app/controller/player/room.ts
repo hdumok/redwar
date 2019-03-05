@@ -1,8 +1,6 @@
-
 import { Context, Controller } from 'egg';
 
 export default class RoomController extends Controller {
-
   /**
    * @api {post} /player/room/list 房间列表
    *
@@ -30,11 +28,11 @@ export default class RoomController extends Controller {
    * @apiError {String}  message 提示语
    * @apiError {Object}  data 数据
    */
-  public async list () {
+  public async list() {
     const { ctx } = this;
 
-    let rooms = await ctx.model.Room.findAll({
-      attributes: ['id', 'name']
+    const rooms = await ctx.model.Room.findAll({
+      attributes: [ 'id', 'name' ],
     });
 
     this.logger.info(rooms);

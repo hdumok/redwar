@@ -8,12 +8,11 @@ import Sequelize = require('sequelize');
 
 export enum UserStatus {
   Normal = 0,
-  Block = 1
+  Block = 1,
 }
 
 export interface UserAttributes {
-  id?: number;
-  uid?: number;
+  id?: string;
   share?: string;
   status?: number;
   account?: string;
@@ -26,12 +25,11 @@ export interface UserAttributes {
   updated?: string | Date | null;
   created?: string | Date | null;
   deleted?: string | Date | null;
-  relation?: RelationAttributes
+  relation?: RelationAttributes;
 }
 
-export interface UserInstance extends Sequelize.Instance<UserAttributes>, UserAttributes{
-  id: number;
-  uid: number;
+export interface UserInstance extends Sequelize.Instance<UserAttributes>, UserAttributes {
+  id: string;
   share: string;
   status: number;
   account: string;
@@ -46,37 +44,35 @@ export interface UserInstance extends Sequelize.Instance<UserAttributes>, UserAt
   deleted: string | Date | null;
   relation?: RelationInstance;
 
-  getWithdraws: Sequelize.HasManyGetAssociationsMixin<WithdrawInstance>
-  addWithdraw: Sequelize.HasManyAddAssociationsMixin<WithdrawInstance, 'id'>
-  getRecharges: Sequelize.HasManyGetAssociationsMixin<RechargeInstance>
-  addRecharge: Sequelize.HasManyAddAssociationsMixin<RechargeInstance, 'id'>
-  //getRole: Sequelize.HasOneGetAssociationMixin<RoleInstance>;
-  //setRole: Sequelize.BelongsToSetAssociationMixin<RoleInstance, RoleId>;
-  //createRole: Sequelize.BelongsToCreateAssociationMixin<RoleAttributes>;
-  //removeRole: Sequelize.HasManyRemoveAssociationMixin<RoleInstance, RoleId>;
+  getWithdraws: Sequelize.HasManyGetAssociationsMixin<WithdrawInstance>;
+  addWithdraw: Sequelize.HasManyAddAssociationsMixin<WithdrawInstance, 'id'>;
+  getRecharges: Sequelize.HasManyGetAssociationsMixin<RechargeInstance>;
+  addRecharge: Sequelize.HasManyAddAssociationsMixin<RechargeInstance, 'id'>;
+  // getRole: Sequelize.HasOneGetAssociationMixin<RoleInstance>;
+  // setRole: Sequelize.BelongsToSetAssociationMixin<RoleInstance, RoleId>;
+  // createRole: Sequelize.BelongsToCreateAssociationMixin<RoleAttributes>;
+  // removeRole: Sequelize.HasManyRemoveAssociationMixin<RoleInstance, RoleId>;
 }
 
-interface UserModel extends Sequelize.Model<UserInstance, UserAttributes>{}
+interface UserModel extends Sequelize.Model<UserInstance, UserAttributes> {}
 
 export default (app: Application) => {
-
   const model = app.model.define<UserInstance, UserAttributes>(
     'user',
     {
-      id: { type: INTEGER, primaryKey: true, autoIncrement: true },
-      uid: { type: INTEGER, allowNull: true, defaultValue: null, unique: true },
+      id: { type: STRING, primaryKey: true },
       share: {
         type: STRING(20),
         allowNull: true,
         defaultValue: null,
-        unique: true
+        unique: true,
       },
       status: { type: INTEGER, allowNull: true, defaultValue: 0 },
       account: {
-        type: STRING(128),
+        type: STRING,
         allowNull: false,
         defaultValue: '',
-        unique: true
+        unique: true,
       },
       password: { type: STRING(255), allowNull: false, defaultValue: '' },
       name: { type: STRING(255), allowNull: false, defaultValue: '' },
@@ -86,11 +82,11 @@ export default (app: Application) => {
       accessed: { type: DATE, allowNull: true },
       updated: { type: DATE, allowNull: true },
       created: { type: DATE, allowNull: true },
-      deleted: { type: DATE, allowNull: true }
+      deleted: { type: DATE, allowNull: true },
     },
     {
-      tableName: app.config.prefix + 'user'
-    }
+      tableName: app.config.prefix + 'user',
+    },
   ) as UserModel;
 
   model.associate = () => {
@@ -103,7 +99,7 @@ export default (app: Application) => {
   };
 
   model.sync({
-    force: app.config.env === 'unittest'
+    force: app.config.env === 'unittest',
   });
 
   return model;

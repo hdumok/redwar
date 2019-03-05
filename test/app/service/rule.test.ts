@@ -11,7 +11,7 @@ describe('service/rule.test.js', () => {
   });
 
   it('红包判断', async () => {
-    let result = await ctx.service.rule.checkPacket(32.87, 5);
+    const result = await ctx.service.rule.checkPacket(32.87, 5);
     assert(result === TransactionValue.Normal);
   });
 });

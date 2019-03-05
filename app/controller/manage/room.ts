@@ -1,10 +1,8 @@
-
 import { Context, Controller } from 'egg';
 import { RoomStatus } from '../../model/room';
 import { TransactionType } from '../../model/transaction';
 
 export default class RoomController extends Controller {
-
   /**
    * @api {post} /room/add 添加红包房间
    * @apiGroup Room
@@ -20,30 +18,28 @@ export default class RoomController extends Controller {
    *     "data": ""
    * }
    */
-  public async add (ctx) {
-
-    let rule = {
-      name: {type: 'string'},
-      award: {type: 'number', min: 1},
+  public async add(ctx) {
+    const rule = {
+      name: { type: 'string' },
+      award: { type: 'number', min: 1 },
     };
 
-    let data = ctx.validater(rule, true);
+    const data = ctx.validater(rule, true);
 
-    let room = await ctx.model.Room.build(data);
-    let transaction = ctx.model.Transaction.build({
+    const room = await ctx.model.Room.build(data);
+    const transaction = ctx.model.Transaction.build({
       type: TransactionType.RoomAward,
       cost_award: data.award,
-      room_award: data.award
+      room_award: data.award,
     });
 
     try {
-      await ctx.model.transaction(async (t) => {
-        await room.save({transaction: t});
+      await ctx.model.transaction(async t => {
+        await room.save({ transaction: t });
         transaction.room_id = room.id;
-        await transaction.save({transaction: t});
+        await transaction.save({ transaction: t });
       });
-    }
-    catch (e){
+    } catch (e) {
       this.logger.error(e);
       return ctx.fail('创建失败');
     }
@@ -63,23 +59,20 @@ export default class RoomController extends Controller {
    * {
    * }
    */
-  public async list (ctx) {
-
-    let rule = {
-      name: {type: 'string', required: false}
+  public async list(ctx) {
+    const rule = {
+      name: { type: 'string', required: false },
     };
 
-    let condition: any = ctx.validater(rule, true);
-    if (condition.name){
-      condition.name = {$like: `%${condition.name}%`};
+    const condition: any = ctx.validater(rule, true);
+    if (condition.name) {
+      condition.name = { $like: `%${condition.name}%` };
     }
 
-    let rooms = await ctx.model.Room.findAll({
-      attributes: ['id', 'name', 'created'],
+    const rooms = await ctx.model.Room.findAll({
+      attributes: [ 'id', 'name', 'created' ],
       where: condition,
-      order: [
-        ['created', 'desc']
-      ]
+      order: [[ 'created', 'desc' ]],
     });
 
     ctx.success(rooms);
@@ -99,17 +92,16 @@ export default class RoomController extends Controller {
    *     "data": ""
    * }
    */
-  public async update (ctx) {
-
-    let rule = {
-      id: {type: 'number'},
-      name: {type: 'string', required: false},
+  public async update(ctx) {
+    const rule = {
+      id: { type: 'number' },
+      name: { type: 'string', required: false },
     };
 
-    let data = ctx.validater(rule, true);
+    const data = ctx.validater(rule, true);
 
-    let room = await ctx.model.Room.findByPk(data.id);
-    if (!room){
+    const room = await ctx.model.Room.findByPk(data.id);
+    if (!room) {
       return ctx.fail('房间不存在');
     }
 
@@ -135,21 +127,20 @@ export default class RoomController extends Controller {
    *     "data": ""
    * }
    */
-  public async status (ctx) {
-
-    let rule = {
-      id: {type: 'number'},
-      status: {type: 'enum', values: RoomStatus},
+  public async status(ctx) {
+    const rule = {
+      id: { type: 'number' },
+      status: { type: 'enum', values: RoomStatus },
     };
 
-    let data = ctx.validater(rule, true);
+    const data = ctx.validater(rule, true);
 
-    let room = await ctx.model.Room.findByPk(data.id);
-    if (!room){
+    const room = await ctx.model.Room.findByPk(data.id);
+    if (!room) {
       return ctx.fail('房间不存在');
     }
 
-    //TODO 如果是下架，该红包房间就无法继续发红包，连接断开
+    // TODO 如果是下架，该红包房间就无法继续发红包，连接断开
 
     Object.assign(room, data);
 
@@ -172,42 +163,39 @@ export default class RoomController extends Controller {
    *     "data": ""
    * }
    */
-  public async recharge (ctx) {
-
-    let rule = {
-      id: {type: 'number'},
-      award: {type: 'number', min: 1},
+  public async recharge(ctx) {
+    const rule = {
+      id: { type: 'number' },
+      award: { type: 'number', min: 1 },
     };
 
-    let {id, award} = ctx.validater(rule, true);
+    const { id, award } = ctx.validater(rule, true);
 
-    let room = await ctx.model.Room.findByPk(id);
-    if (!room){
+    const room = await ctx.model.Room.findByPk(id);
+    if (!room) {
       return ctx.fail('房间不存在');
     }
 
-    let transaction = ctx.model.Transaction.build({
-        type: TransactionType.RoomAward,
-        room_id: room.id,
-        cost_award: award
+    const transaction = ctx.model.Transaction.build({
+      type: TransactionType.RoomAward,
+      room_id: room.id,
+      cost_award: award,
     });
 
     try {
-      await ctx.model.transaction(async (t) => {
+      await ctx.model.transaction(async t => {
         room.award = room.award + award;
         transaction.room_award = room.award;
-        await room.save({transaction: t});
-        await transaction.save({transaction: t});
+        await room.save({ transaction: t });
+        await transaction.save({ transaction: t });
       });
-    }
-    catch (e){
+    } catch (e) {
       this.logger.error(e);
       return ctx.fail('充值失败');
     }
 
     ctx.success();
   }
-
 
   /**
    * @api {post} /room/delete 删除红包房间
@@ -223,22 +211,21 @@ export default class RoomController extends Controller {
    *     "data": ""
    * }
    */
-  public async delete (ctx) {
-
-    let rule = {
-      id: {type: 'number'}
+  public async delete(ctx) {
+    const rule = {
+      id: { type: 'number' },
     };
 
-    const {id} = ctx.validater(rule);
+    const { id } = ctx.validater(rule);
 
-    let room = await ctx.model.Room.findByPk(id);
-    if (!room){
+    const room = await ctx.model.Room.findByPk(id);
+    if (!room) {
       return ctx.fail('房间不存在');
     }
 
     await room.destroy();
 
-    //TODO 如果是删除，该红包房间就无法继续发红包，连接断开
+    // TODO 如果是删除，该红包房间就无法继续发红包，连接断开
 
     ctx.success();
   }

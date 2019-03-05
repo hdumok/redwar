@@ -55,11 +55,11 @@ export default class RechargeController extends Controller {
    * @apiError {String}  message 提示语
    * @apiError {Object}  data 数据
    */
-  public async balance () {
+  public async balance() {
     const { ctx } = this;
 
-    let balances = await ctx.model.Balance.findAll({
-      attributes: ['id', 'award']
+    const balances = await ctx.model.Balance.findAll({
+      attributes: [ 'id', 'award' ],
     });
 
     ctx.success(balances);
@@ -84,57 +84,53 @@ export default class RechargeController extends Controller {
    *   }
    * }
    */
-  public async submit () {
-    let rule = {
-      award: { type: 'number', mix: 0 }
+  public async submit() {
+    const rule = {
+      award: { type: 'number', mix: 0 },
     };
 
     const { ctx } = this;
     const { award } = ctx.validater(rule);
 
-    let user = ctx.session.user;
+    const user = ctx.session.user;
 
-    //存数据库的订单信息
-    let recharge = ctx.model.Recharge.build({
+    // 存数据库的订单信息
+    const recharge = ctx.model.Recharge.build({
       status: RechargeStatus.Normal,
       oid: ctx.helper.getOrderId(),
       user_id: user.id,
       cost_award: award,
-      remark: `${ctx.helper.getDateTime()} ${user.name} 创建 ${award} 订单。`
+      remark: `${ctx.helper.getDateTime()} ${user.name} 创建 ${award} 订单。`,
     });
 
     try {
       await recharge.save();
-    }
-    catch (e) {
+    } catch (e) {
       this.logger.error('操作失败, 请稍后再试', e);
       ctx.fail('操作失败, 请稍后再试');
       return;
     }
 
-    ctx.success(
-      ctx.app.config.env !== 'prod' ? { oid: recharge.oid } : null,
-      '创建订单成功'
-    );
+    ctx.success(ctx.app.config.env !== 'prod' ? { oid: recharge.oid } : null, '创建订单成功');
   }
 
-  //TODO 充值回调
-  public async payback () {
-    let rule = {
+  // TODO 充值回调
+  public async payback() {
+    const rule = {
       oid: { type: 'string' },
-      status: { type: 'number' }
+      status: { type: 'number' },
     };
 
     const { ctx } = this;
     const { oid, status } = ctx.validater(rule);
 
-    let recharge = await ctx.model.Recharge.findOne({
+    const recharge = await ctx.model.Recharge.findOne({
       where: { oid },
       include: [
         {
-          model: ctx.model.User
-        }
-      ]
+          model: ctx.model.User,
+        },
+      ],
     });
     this.logger.debug('充值记录', recharge);
     if (!recharge) {
@@ -159,7 +155,7 @@ export default class RechargeController extends Controller {
     if (status === RechargeStatus.Success) {
       recharge.recharged = new Date();
       recharge.award = recharge.user.award;
-      recharge.remark = `${recharge.user.name} 成功充值 ${ recharge.cost_award }红包, 用户当前红包数 ${recharge.user.award}`;
+      recharge.remark = `${recharge.user.name} 成功充值 ${recharge.cost_award}红包, 用户当前红包数 ${recharge.user.award}`;
 
       transaction = ctx.model.Transaction.build({
         type: TransactionType.Recharge,
@@ -167,22 +163,21 @@ export default class RechargeController extends Controller {
         user_id: recharge.user_id,
         cost_award: recharge.cost_award,
         award: recharge.award,
-        remark: recharge.remark
+        remark: recharge.remark,
       });
     } else {
       recharge.rejected = new Date();
     }
 
     try {
-      await ctx.model.transaction(async (t) => {
-
+      await ctx.model.transaction(async t => {
         if (!recharge || !recharge.user) throw new Error('参数不足');
 
         await recharge.save({ transaction: t });
         await recharge.user.save({ transaction: t });
 
         if (transaction) {
-          await transaction.save({transaction: t});
+          await transaction.save({ transaction: t });
         }
       });
     } catch (e) {

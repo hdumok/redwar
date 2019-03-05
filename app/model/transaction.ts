@@ -13,7 +13,7 @@ export enum TransactionValue {
   Lei = '中雷',
   BaoZi = '豹子',
   ShunZi = '顺子',
-  Min = '最小'
+  Min = '最小',
 }
 
 export enum TransactionType {
@@ -26,31 +26,20 @@ export enum TransactionType {
   Recharge = 6,
   Withdraw = 7,
   RoomPresent = 8,
-  RoomAward = 9
+  RoomAward = 9,
 }
 
-const TransactionName = [
-  '未知',
-  '发红包',
-  '抢红包',
-  '回收包',
-  '多雷奖励',
-  '下级分红',
-  '用户充值',
-  '用户提现',
-  '房间分红',
-  '房间充值',
-];
+const TransactionName = [ '未知', '发红包', '抢红包', '回收包', '多雷奖励', '下级分红', '用户充值', '用户提现', '房间分红', '房间充值' ];
 
 export interface TransactionAttributes {
-  id?: number;
+  id?: string;
   type?: TransactionType;
   name?: string;
-  user_id?: number;
-  room_id?: number;
-  packet_id?: number;
-  withdraw_id?: number;
-  recharge_id?: number;
+  user_id?: string;
+  room_id?: string;
+  packet_id?: string;
+  withdraw_id?: string;
+  recharge_id?: string;
   base_award?: number;
   packet_award?: number;
   spical_award?: number;
@@ -64,24 +53,22 @@ export interface TransactionAttributes {
   updated?: string | Date | null;
   created?: string | Date | null;
   deleted?: string | Date | null;
-  user?: UserAttributes,
-  room?: RoomAttributes,
-  packet?: PacketAttributes,
-  withdraw?: WithdrawAttributes,
-  rechagre?: RechargeAttributes
+  user?: UserAttributes;
+  room?: RoomAttributes;
+  packet?: PacketAttributes;
+  withdraw?: WithdrawAttributes;
+  rechagre?: RechargeAttributes;
 }
 
-export interface TransactionInstance
-  extends Sequelize.Instance<TransactionAttributes>,
-    TransactionAttributes {
-  id: number;
+export interface TransactionInstance extends Sequelize.Instance<TransactionAttributes>, TransactionAttributes {
+  id: string;
   type: TransactionType;
   name?: string;
-  user_id: number;
-  room_id: number;
-  packet_id: number;
-  withdraw_id: number;
-  recharge_id: number;
+  user_id: string;
+  room_id: string;
+  packet_id: string;
+  withdraw_id: string;
+  recharge_id: string;
   base_award: number;
   packet_award: number;
   spical_award: number;
@@ -95,32 +82,30 @@ export interface TransactionInstance
   updated: string | Date | null;
   created: string | Date | null;
   deleted: string | Date | null;
-  user?: UserInstance,
-  room?: RoomInstance,
-  packet?: PacketInstance,
-  withdraw?: WithdrawInstance,
-  rechagre?: RechargeInstance
+  user?: UserInstance;
+  room?: RoomInstance;
+  packet?: PacketInstance;
+  withdraw?: WithdrawInstance;
+  rechagre?: RechargeInstance;
 }
 
-interface TransactionModel
-  extends Sequelize.Model<TransactionInstance, TransactionAttributes> {
-}
+interface TransactionModel extends Sequelize.Model<TransactionInstance, TransactionAttributes> {}
 
 export default (app: Application) => {
   const model = app.model.define(
     'transaction',
     {
-      id: { type: INTEGER, primaryKey: true, autoIncrement: true },
-      type: { type: INTEGER, allowNull: false, defaultValue: TransactionType.Unknow},
-      name: { type: STRING(128), allowNull: false, defaultValue: TransactionName[0]},
-      user_id: { type: INTEGER, allowNull: true },
-      room_id: { type: INTEGER, allowNull: true },
-      packet_id: { type: INTEGER, allowNull: true },
-      withdraw_id: { type: INTEGER, allowNull: true },
-      recharge_id: { type: INTEGER, allowNull: true },
+      id: { type: STRING, primaryKey: true },
+      type: { type: INTEGER, allowNull: false, defaultValue: TransactionType.Unknow },
+      name: { type: STRING, allowNull: false, defaultValue: TransactionName[0] },
+      user_id: { type: STRING, allowNull: true },
+      room_id: { type: STRING, allowNull: true },
+      packet_id: { type: STRING, allowNull: true },
+      withdraw_id: { type: STRING, allowNull: true },
+      recharge_id: { type: STRING, allowNull: true },
       base_award: { type: DECIMAL(10, 2), allowNull: false, defaultValue: 0 },
 
-      //三种红包值的和的叠加，就是 cost_award
+      // 三种红包值的和的叠加，就是 cost_award
       packet_award: { type: DECIMAL(10, 2), allowNull: false, defaultValue: 0 },
       spical_award: { type: DECIMAL(10, 2), allowNull: false, defaultValue: 0 },
       lei_award: { type: DECIMAL(10, 2), allowNull: false, defaultValue: 0 },
@@ -129,28 +114,27 @@ export default (app: Application) => {
       award: { type: DECIMAL(10, 2), allowNull: false, defaultValue: 0 },
       room_award: { type: DECIMAL(10, 2), allowNull: false, defaultValue: 0 },
       value: {
-        type: STRING(128),
+        type: STRING,
         allowNull: false,
-        defaultValue: TransactionValue.Normal
+        defaultValue: TransactionValue.Normal,
       },
       turns: { type: INTEGER, allowNull: false, defaultValue: 0 },
-      remark: { type: STRING(128), allowNull: false, defaultValue: '' },
+      remark: { type: STRING, allowNull: false, defaultValue: '' },
       updated: { type: DATE, allowNull: true },
       created: { type: DATE, allowNull: true },
-      deleted: { type: DATE, allowNull: true }
+      deleted: { type: DATE, allowNull: true },
     },
     {
       tableName: app.config.prefix + 'transaction',
       hooks: {
-        beforeCreate (item){
+        beforeCreate(item) {
           if (item && item.type) {
             item.name = TransactionName[item.type];
           }
-        }
-      }
-    }
+        },
+      },
+    },
   ) as TransactionModel;
-
 
   model.associate = () => {
     app.model.Transaction.belongsTo(app.model.User, { constraints: false });

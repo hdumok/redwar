@@ -10,3 +10,5 @@ import 'egg-validate';
 import 'egg-cors';
 import 'egg-redis';
 import 'egg-cache';
+import 'egg-grpc';
+import 'egg-grpc-server';

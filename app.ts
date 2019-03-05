@@ -2,36 +2,44 @@
 
 import { Metadata } from 'grpc';
 
-export default (app) => {
-
+export default app => {
   app.beforeStart(async () => {
     // 应用会等待这个函数执行完成才启动
+    // ID 生成器策略
+    app.model.addHook('beforeCreate', app.model.Sequence.setId);
+    app.model.addHook('beforeBulkCreate', app.model.Sequence.setId);
 
     await app.model.sync({
-      force: app.config.env === 'unittest'
+      force: app.config.env === 'unittest',
     });
 
-    if (app.config.env === 'unittest'){
-
+    if (app.config.env === 'unittest') {
       app.model.Config.bulkCreate([
-        { id: 1, key: 'packet_duration', value: 60},
-        { id: 2, key: 'award_present', value: [0.08, 0.08, 0.08, 0.06, 0.03, 0.03, 0.03]},
-        { id: 3, key: 'award_1030', value: {
+        { id: 1, key: 'packet_duration', value: 60 },
+        { id: 2, key: 'award_present', value: [ 0.08, 0.08, 0.08, 0.06, 0.03, 0.03, 0.03 ] },
+        {
+          id: 3,
+          key: 'award_1030',
+          value: {
             spical: 1.11,
-            lei: [0, 0, 0, 3.33, 6.66, 26.66, 66.66, 166.66]
-          }
+            lei: [ 0, 0, 0, 3.33, 6.66, 26.66, 66.66, 166.66 ],
+          },
         },
-        { id: 4, key: 'award_3060', value: {
+        {
+          id: 4,
+          key: 'award_3060',
+          value: {
             spical: 6.66,
-            lei: [0, 0, 0, 6.66, 18.88, 66.66, 166.66, 888]
-        }}
+            lei: [ 0, 0, 0, 6.66, 18.88, 66.66, 166.66, 888 ],
+          },
+        },
       ]);
       app.model.Admin.create({
         id: 1,
         role: 'admin',
         name: '管理员',
         account: 'admin',
-        password: 'e10adc3949ba59abbe56e057f20f883e'
+        password: 'e10adc3949ba59abbe56e057f20f883e',
       });
       app.model.Balance.bulkCreate([
         { id: 1, award: 100 },
@@ -39,11 +47,11 @@ export default (app) => {
         { id: 3, award: 300 },
         { id: 4, award: 400 },
         { id: 5, award: 500 },
-        { id: 6, award: 600 }
+        { id: 6, award: 600 },
       ]);
       app.model.Room.create({
         name: '红包房间',
-        award: 10000
+        award: 10000,
       });
     }
   });
@@ -65,7 +73,7 @@ export default (app) => {
   //   }
   // },         3000);
 
-  app.Sequelize.postgres.DECIMAL.parse = (value) => {
+  app.Sequelize.postgres.DECIMAL.parse = value => {
     return parseFloat(Number(value).toFixed(2));
   };
 
@@ -73,7 +81,7 @@ export default (app) => {
     app.logger.error('[unhandledRejection]', { promise, reason });
   });
 
-  process.on('uncaughtException', (e) => {
+  process.on('uncaughtException', e => {
     app.logger.error('[uncaughtException]', e);
   });
 };

@@ -1,111 +1,110 @@
 import { EggAppConfig, EggAppInfo, PowerPartial } from 'egg';
 
 export default (appInfo: EggAppInfo) => {
-
   const config = {} as PowerPartial<EggAppConfig>;
 
   config.keys = appInfo.name;
 
   config.prefix = '';
 
-  config.middleware = ['interface'];
+  config.middleware = [ 'interface' ];
 
   config.interface = {
     success: {
       code: 200,
-      message: 'success'
+      message: 'success',
     },
 
     fail: {
       code: 400,
-      message: 'fail'
+      message: 'fail',
     },
 
     unlogin: {
       code: 401,
-      message: '请重新登录'
+      message: '请重新登录',
     },
 
     notfound: {
       code: 404,
-      message: '接口地址不存在'
+      message: '接口地址不存在',
     },
 
     invalid_param: {
       code: 422,
-      message: '参数错误, %s'
+      message: '参数错误, %s',
     },
 
     server_error: {
       code: 500,
-      message: '服务器错误, %s'
-    }
+      message: '服务器错误, %s',
+    },
   };
 
   config.session = {
     key: 'token',
     maxAge: 7 * 24 * 3600 * 1000,
     httpOnly: true,
-    encrypt: true
+    encrypt: true,
   };
 
   config.security = {
     csrf: {
-      enable: false
+      enable: false,
     },
     domainWhiteList: [],
     methodnoallow: {
-      enable: false
-    }
+      enable: false,
+    },
   };
 
   config.cors = {
     credentials: true,
-    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH'
+    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
   };
 
   config.workerStartTimeout = 10 * 60 * 1000;
 
   config.cluster = {
     listen: {
-      port: 7001
-    }
+      port: 7001,
+    },
   };
 
   config.clusterClient = {
     maxWaitTime: 60000,
-    responseTimeout: 60000
+    responseTimeout: 60000,
   };
 
   config.view = {
     defaultViewEngine: 'nunjucks',
     mapping: {
-      '.nj': 'nunjucks'
-    }
+      '.nj': 'nunjucks',
+    },
   };
 
   config.i18n = {
     defaultLocale: 'zh-CN',
     queryField: 'locale',
     cookieField: 'locale',
-    cookieMaxAge: '1d'
+    cookieMaxAge: '1d',
   };
 
   config.logger = {
     dir: appInfo.baseDir + '/logs/',
-    appLogName: `stdout.log`,
-    errorLogName: `stdout.log`,
-    coreLogName: `stdout.log`,
-    agentLogName: `stdout.log`,
+    appLogName: 'stdout.log',
+    errorLogName: 'stdout.log',
+    coreLogName: 'stdout.log',
+    agentLogName: 'stdout.log',
     level: 'DEBUG',
-    consoleLevel: 'DEBUG'
+    consoleLevel: 'DEBUG',
   };
 
   config.customLogger = {
     scheduleLogger: {
       file: appInfo.baseDir + '/logs/' + 'schedule.log',
-      consoleLevel: 'DEBUG'
-    }
+      consoleLevel: 'DEBUG',
+    },
   };
 
   config.redis = {
@@ -116,15 +115,15 @@ export default (appInfo: EggAppInfo) => {
         port: 6379,
         host: '127.0.0.1',
         password: '123456',
-        db: 0
+        db: 0,
       },
       cache: {
         port: 6379,
         host: '127.0.0.1',
         password: '123456',
-        db: 1
-      }
-    }
+        db: 1,
+      },
+    },
   };
 
   config.sessionRedis = {
@@ -138,9 +137,9 @@ export default (appInfo: EggAppInfo) => {
     port: 5432,
     username: 'redwar',
     password: '12345678',
-    timezone: '+08:00', //东八时区
+    timezone: '+08:00', // 东八时区
     dialectOptions: {
-      decimalNumbers: true
+      decimalNumbers: true,
     },
     benchmark: true,
     define: {
@@ -150,9 +149,8 @@ export default (appInfo: EggAppInfo) => {
       createdAt: 'created',
       updatedAt: 'updated',
       deletedAt: 'deleted',
-      hooks: {
-      }
-    }
+      hooks: {},
+    },
   };
 
   config.cache = {
@@ -161,9 +159,9 @@ export default (appInfo: EggAppInfo) => {
       memory: {
         driver: 'memory',
         max: 100,
-        ttl: 0
-      }
-    }
+        ttl: 0,
+      },
+    },
   };
   config.grpc = {
     dir: 'app/grpc',
@@ -177,18 +175,18 @@ export default (appInfo: EggAppInfo) => {
   };
 
   config.grpcServer = {
-    protoPath: 'app/grpc', //*.proto path
-    extendPath: 'app/grpc', //service path
+    protoPath: 'app/grpc', // *.proto path
+    extendPath: 'app/grpc', // service path
     host: '0.0.0.0',
     port: '7002',
     loaderOption: {
-      //加载proto
+      // 加载proto
       keepCase: true,
       longs: String,
       enums: String,
       defaults: true,
-      oneofs: true
-    }
+      oneofs: true,
+    },
   };
   // the return config will combines to EggAppConfig
   return config;

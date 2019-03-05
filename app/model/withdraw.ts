@@ -6,58 +6,54 @@ import { UserAttributes, UserInstance } from './user';
 export enum WithdrawStatus {
   Normal = 0,
   Success = 1,
-  Fail = 2
+  Fail = 2,
 }
 
 export interface WithdrawAttributes {
-  id?: number;
+  id?: string;
   status?: WithdrawStatus;
-  user_id?: number,
-  cost_award?: number,
-  award?: number,
-  remark?: string,
+  user_id?: string;
+  cost_award?: number;
+  award?: number;
+  remark?: string;
   updated?: string | Date | null;
   created?: string | Date | null;
   deleted?: string | Date | null;
-  user?: UserAttributes
+  user?: UserAttributes;
 }
 
-export interface WithdrawInstance
-  extends Sequelize.Instance<WithdrawAttributes>,
-    WithdrawAttributes {
-  id: number;
+export interface WithdrawInstance extends Sequelize.Instance<WithdrawAttributes>, WithdrawAttributes {
+  id: string;
   status: WithdrawStatus;
-  user_id: number,
-  cost_award: number,
-  award: number,
-  remark: string,
+  user_id: string;
+  cost_award: number;
+  award: number;
+  remark: string;
   updated: string | Date | null;
   created: string | Date | null;
   deleted: string | Date | null;
   user?: UserInstance;
 }
 
-interface WithdrawModel
-  extends Sequelize.Model<WithdrawInstance, WithdrawAttributes> {
-}
+interface WithdrawModel extends Sequelize.Model<WithdrawInstance, WithdrawAttributes> {}
 
 export default (app: Application) => {
   const model = app.model.define(
     'withdraw',
     {
-      id: { type: INTEGER, primaryKey: true, autoIncrement: true },
+      id: { type: STRING, primaryKey: true },
       status: { type: INTEGER, allowNull: false, defaultValue: WithdrawStatus.Normal },
-      user_id: { type: INTEGER, allowNull: false},
+      user_id: { type: STRING, allowNull: false },
       cost_award: { type: DECIMAL(10, 2), allowNull: false, defaultValue: 0 },
       award: { type: DECIMAL(10, 2), allowNull: false, defaultValue: 0 },
-      remark: {type: STRING(128), allowNull: false, defaultValue: '' },
+      remark: { type: STRING, allowNull: false, defaultValue: '' },
       updated: { type: DATE, allowNull: true },
       created: { type: DATE, allowNull: true },
-      deleted: { type: DATE, allowNull: true }
+      deleted: { type: DATE, allowNull: true },
     },
     {
-      tableName: app.config.prefix + 'withdraw'
-    }
+      tableName: app.config.prefix + 'withdraw',
+    },
   ) as WithdrawModel;
 
   model.associate = () => {
@@ -65,7 +61,7 @@ export default (app: Application) => {
   };
 
   model.sync({
-    force: app.config.env === 'unittest'
+    force: app.config.env === 'unittest',
   });
 
   return model;

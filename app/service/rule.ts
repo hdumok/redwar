@@ -1,25 +1,22 @@
-
 import { Service } from 'egg';
 import { TransactionValue } from '../model/transaction';
 
 import decimal = require('decimal102');
 
 interface PacketItem {
-  turns: number,
-  award: number
+  turns: number;
+  award: number;
 }
 
 export default class RuleService extends Service {
-
   private store = this.app.redis.clients.get('cache');
   // 分配七个包
-  public createPackets (award: number, lei: number, num: number = 7): PacketItem[] {
-
-    let array: number[] = [];
+  public createPackets(award: number, lei: number, num: number = 7): PacketItem[] {
+    const array: number[] = [];
     let sum: number = 0;
 
     for (let i = 0; i < num; i++) {
-      let n = Math.random();
+      const n = Math.random();
       sum = sum + n;
       array.push(n);
     }
@@ -27,9 +24,9 @@ export default class RuleService extends Service {
     array[num - 1] = award;
 
     for (let i = 0; i < num - 1; i++) {
-      array[i] = decimal(award * array[i] / sum);
+      array[i] = decimal((award * array[i]) / sum);
 
-      //首包不能为0
+      // 首包不能为0
       if (i === 0) {
         if (this.checkPacket(array[i], lei) === TransactionValue.Lei) {
           array[i] = array[i] + 0.01;
@@ -41,50 +38,40 @@ export default class RuleService extends Service {
 
     return array.map((award, index) => ({
       turns: index + 1,
-      award: award
+      award,
     }));
   }
 
-  public async setPackets (id, packet_items: PacketItem[]): Promise<void> {
+  public async setPackets(id, packet_items: PacketItem[]): Promise<void> {
     await this.store.del(`packet:${id}`);
-    await this.store.lpush(
-      `packet:${id}`,
-      ...packet_items.map((item) => this.ctx.helper.stringifyObj(item))
-    );
+    await this.store.lpush(`packet:${id}`, ...packet_items.map(item => this.ctx.helper.stringifyObj(item)));
   }
 
-  public async getPacket (id): Promise<PacketItem> {
-    let packet_item = await this.store.rpop(`packet:${id}`);
+  public async getPacket(id): Promise<PacketItem> {
+    const packet_item = await this.store.rpop(`packet:${id}`);
     return this.ctx.helper.parseObj(packet_item);
   }
 
-  public async setPacket (id, packet_item: PacketItem): Promise<void> {
-    await this.store.lpush(
-      `packet:${id}`,
-      this.ctx.helper.stringifyObj(packet_item)
-    );
+  public async setPacket(id, packet_item: PacketItem): Promise<void> {
+    await this.store.lpush(`packet:${id}`, this.ctx.helper.stringifyObj(packet_item));
   }
 
-  public checkPacket (award: number, lei: number): TransactionValue {
-
+  public checkPacket(award: number, lei: number): TransactionValue {
     let value = TransactionValue.Normal;
 
-    let array = decimal(award).toFixed(2).replace('.', '').split('');
+    const array = decimal(award)
+      .toFixed(2)
+      .replace('.', '')
+      .split('');
 
-    //中雷
+    // 中雷
     if (String(lei) === array[array.length - 1]) {
       value = TransactionValue.Lei;
-    }
-    //0.01
-    else if (array.join('') === '001') {
+    } else if (array.join('') === '001') {
       value = TransactionValue.Min;
-    }
-    //顺子
-    else if ('0123456789'.indexOf(array.join('')) !== -1 || '9876543210'.indexOf(array.join('')) !== -1) {
+    } else if ('0123456789'.indexOf(array.join('')) !== -1 || '9876543210'.indexOf(array.join('')) !== -1) {
       value = TransactionValue.ShunZi;
-    }
-    //豹子
-    else if (Array.from(new Set(array)).length === 1) {
+    } else if (Array.from(new Set(array)).length === 1) {
       value = TransactionValue.BaoZi;
     }
 

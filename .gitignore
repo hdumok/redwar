@@ -13,3 +13,4 @@ app/**/*.js
 test/**/*.js
 config/**/*.js
 config/config.local.ts
+config/config.unittest.ts

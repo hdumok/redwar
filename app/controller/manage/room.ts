@@ -82,7 +82,7 @@ export default class RoomController extends Controller {
    * @api {post} /room/update 编辑红包房间
    * @apiGroup Room
    *
-   * @apiParam {Number} id 红包房间ID
+   * @apiParam {String} packet_id 红包房间ID
    * @apiParam {String} [name] 红包房间名称
    *
    * @apiSuccessExample {json} Success-Response:
@@ -94,7 +94,7 @@ export default class RoomController extends Controller {
    */
   public async update(ctx) {
     const rule = {
-      id: { type: 'number' },
+      id: { type: 'string' },
       name: { type: 'string', required: false },
     };
 
@@ -116,7 +116,7 @@ export default class RoomController extends Controller {
    * @api {post} /room/status 修改红包房间状态
    * @apiGroup Room
    *
-   * @apiParam {Number} id 红包房间ID
+   * @apiParam {String} packet_id 红包房间ID
    * @apiParam {Number} status 红包房间状态 0-普通 1-置顶 2-隐藏
    *
    * @apiSuccessExample {json} Success-Response:
@@ -129,7 +129,7 @@ export default class RoomController extends Controller {
    */
   public async status(ctx) {
     const rule = {
-      id: { type: 'number' },
+      id: { type: 'string' },
       status: { type: 'enum', values: RoomStatus },
     };
 
@@ -153,7 +153,7 @@ export default class RoomController extends Controller {
    * @api {post} /room/recharge 红包房间充值
    * @apiGroup Room
    *
-   * @apiParam {Number} id 红包房间ID
+   * @apiParam {String} packet_id 红包房间ID
    * @apiParam {String} award 充值红包金额
    *
    * @apiSuccessExample {json} Success-Response:
@@ -165,7 +165,7 @@ export default class RoomController extends Controller {
    */
   public async recharge(ctx) {
     const rule = {
-      id: { type: 'number' },
+      id: { type: 'string' },
       award: { type: 'number', min: 1 },
     };
 
@@ -201,7 +201,7 @@ export default class RoomController extends Controller {
    * @api {post} /room/delete 删除红包房间
    * @apiGroup Room
    *
-   * @apiParam {Number} id 红包房间ID
+   * @apiParam {String} packet_id 红包房间ID
    *
    * @apiSuccessExample {json} Success-Response:
    * {
@@ -213,7 +213,7 @@ export default class RoomController extends Controller {
    */
   public async delete(ctx) {
     const rule = {
-      id: { type: 'number' },
+      id: { type: 'string' },
     };
 
     const { id } = ctx.validater(rule);

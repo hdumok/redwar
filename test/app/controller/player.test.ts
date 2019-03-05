@@ -493,7 +493,7 @@ describe('controller/player/user.ts', () => {
         .post('/player/packet/open')
         .set('cookie', user.cookie)
         .send({
-          id: packet_id,
+          packet_id,
           award: 1000,
         })
         .expect(200);

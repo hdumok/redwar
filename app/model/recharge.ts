@@ -50,7 +50,7 @@ export default (app: Application) => {
     {
       id: { type: STRING, primaryKey: true },
       status: { type: INTEGER, allowNull: true, defaultValue: RechargeStatus.Normal },
-      oid: { type: STRING(255), allowNull: false, defaultValue: '', unique: true },
+      oid: { type: STRING, allowNull: false, defaultValue: '', unique: true },
       user_id: { type: STRING, allowNull: false },
       cost_award: { type: DECIMAL(10, 2), allowNull: false, defaultValue: 0 },
       award: { type: DECIMAL(10, 2), allowNull: false, defaultValue: 0 },

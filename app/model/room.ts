@@ -38,8 +38,8 @@ export default (app: Application) => {
     {
       id: { type: STRING, primaryKey: true },
       status: { type: INTEGER, allowNull: false, defaultValue: 0 },
-      name: { type: STRING(255), allowNull: false, defaultValue: '' },
-      headimgurl: { type: STRING(255), allowNull: false, defaultValue: '' },
+      name: { type: STRING, allowNull: false, defaultValue: '' },
+      headimgurl: { type: STRING, allowNull: false, defaultValue: '' },
       award: { type: DECIMAL(10, 2), allowNull: false, defaultValue: 0 },
       updated: { type: DATE, allowNull: true },
       created: { type: DATE, allowNull: true },

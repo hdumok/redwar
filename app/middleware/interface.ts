@@ -21,6 +21,7 @@ export default function(options: EggAppConfig['interface'], app: Application): a
           break;
         case 'manage':
           break;
+        default:
       }
 
       await next();

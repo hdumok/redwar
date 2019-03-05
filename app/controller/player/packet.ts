@@ -11,7 +11,7 @@ export default class PacketController extends Controller {
    *
    * @apiGroup packet
    *
-   * @apiParam {Number} id  红包id
+   * @apiParam {String} packet_id  红包id
    *
    * @apiSuccess {Number}  code 0
    * @apiSuccess {String}  message 提示语
@@ -63,15 +63,15 @@ export default class PacketController extends Controller {
    */
   public async index() {
     const rule = {
-      id: { type: 'number' },
+      packet_id: { type: 'string' },
     };
 
     const { ctx } = this;
-    const { id } = ctx.validater(rule);
+    const { packet_id } = ctx.validater(rule);
 
     const user = ctx.session.user;
 
-    let packet: any = await ctx.model.Packet.findByPk(id, {
+    let packet: any = await ctx.model.Packet.findByPk(packet_id, {
       attributes: [ 'id', 'status', 'base_award', 'award', 'lei', 'turns', 'all_turns', 'created', 'finished' ],
       include: [
         {
@@ -85,9 +85,9 @@ export default class PacketController extends Controller {
           attributes: [ 'id', 'name', 'headimgurl' ],
           through: {
             where: {
+              packet_id,
               type: TransactionType.Qiang,
-              packet_id: id,
-              user_id: 0,
+              user_id: '',
             },
             attributes: [ 'value', 'packet_award', 'created' ],
           },
@@ -98,9 +98,9 @@ export default class PacketController extends Controller {
           attributes: [ 'id', 'name', 'headimgurl' ],
           through: {
             where: {
+              packet_id,
               type: TransactionType.Qiang,
-              packet_id: id,
-              user_id: { $ne: 0 },
+              user_id: { $ne: '' },
             },
             attributes: [ 'value', 'packet_award', 'created' ],
           },
@@ -185,7 +185,7 @@ export default class PacketController extends Controller {
    */
   public async list() {
     const rule = {
-      room_id: { type: 'number', required: true },
+      room_id: { type: 'string', required: true },
       limit: { type: 'number', required: false, default: 10 },
       time: {
         type: 'string',
@@ -228,7 +228,7 @@ export default class PacketController extends Controller {
   }
   public async send() {
     const rule = {
-      room_id: { type: 'number' },
+      room_id: { type: 'string' },
       award: { type: 'number' },
       lei: { type: 'number', min: 0, max: 9 },
     };
@@ -349,14 +349,14 @@ export default class PacketController extends Controller {
 
   public async open() {
     const rule = {
-      id: { type: 'number' },
+      packet_id: { type: 'string' },
     };
 
     const { ctx } = this;
-    const { id } = ctx.validater(rule);
+    const { packet_id } = ctx.validater(rule);
     try {
       // 红包
-      const packet = await ctx.model.Packet.findByPk(id, {
+      const packet = await ctx.model.Packet.findByPk(packet_id, {
         include: [
           {
             model: ctx.model.User,
@@ -729,7 +729,7 @@ export default class PacketController extends Controller {
       where: {
         type: TransactionType.Qiang,
         packet_id,
-        user_id: 0,
+        user_id: '',
       },
     });
     if (!room_packet) {

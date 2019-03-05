@@ -31,13 +31,13 @@ export default (app: Application) => {
     {
       id: { type: STRING, primaryKey: true },
       key: {
-        type: STRING(255),
+        type: STRING,
         allowNull: false,
         defaultValue: '',
         unique: true,
       },
       value: { type: JSONB, allowNull: false, defaultValue: '' },
-      remark: { type: STRING(255), allowNull: false, defaultValue: '' },
+      remark: { type: STRING, allowNull: false, defaultValue: '' },
       updated: { type: DATE, allowNull: true },
       created: { type: DATE, allowNull: true },
       deleted: { type: DATE, allowNull: true },

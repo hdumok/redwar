@@ -1,13 +1,12 @@
 {
   "extends": "tslint-config-egg",
   "linterOptions": {
-    "exclude": [
-      "node_modules/"
-    ]
+    "exclude": ["node_modules/"]
   },
   "rules": {
     "align": true,
     "no-var-requires": false,
-    "linebreak-style": false
+    "linebreak-style": false,
+    "no-extra-boolean-cast": false
   }
 }

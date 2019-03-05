@@ -48,10 +48,6 @@ export interface UserInstance extends Sequelize.Instance<UserAttributes>, UserAt
   addWithdraw: Sequelize.HasManyAddAssociationsMixin<WithdrawInstance, 'id'>;
   getRecharges: Sequelize.HasManyGetAssociationsMixin<RechargeInstance>;
   addRecharge: Sequelize.HasManyAddAssociationsMixin<RechargeInstance, 'id'>;
-  // getRole: Sequelize.HasOneGetAssociationMixin<RoleInstance>;
-  // setRole: Sequelize.BelongsToSetAssociationMixin<RoleInstance, RoleId>;
-  // createRole: Sequelize.BelongsToCreateAssociationMixin<RoleAttributes>;
-  // removeRole: Sequelize.HasManyRemoveAssociationMixin<RoleInstance, RoleId>;
 }
 
 interface UserModel extends Sequelize.Model<UserInstance, UserAttributes> {}
@@ -61,24 +57,14 @@ export default (app: Application) => {
     'user',
     {
       id: { type: STRING, primaryKey: true },
-      share: {
-        type: STRING(20),
-        allowNull: true,
-        defaultValue: null,
-        unique: true,
-      },
+      share: { type: STRING, allowNull: true, unique: true },
       status: { type: INTEGER, allowNull: true, defaultValue: 0 },
-      account: {
-        type: STRING,
-        allowNull: false,
-        defaultValue: '',
-        unique: true,
-      },
-      password: { type: STRING(255), allowNull: false, defaultValue: '' },
-      name: { type: STRING(255), allowNull: false, defaultValue: '' },
-      headimgurl: { type: STRING(255), allowNull: false, defaultValue: '' },
+      account: { type: STRING, allowNull: false, defaultValue: '', unique: true },
+      password: { type: STRING, allowNull: false, defaultValue: '' },
+      name: { type: STRING, allowNull: false, defaultValue: '' },
+      headimgurl: { type: STRING, allowNull: false, defaultValue: '' },
       award: { type: DECIMAL(10, 2), allowNull: false, defaultValue: 0 },
-      token: { type: STRING(255), allowNull: true, defaultValue: '' },
+      token: { type: STRING, allowNull: true, defaultValue: '' },
       accessed: { type: DATE, allowNull: true },
       updated: { type: DATE, allowNull: true },
       created: { type: DATE, allowNull: true },

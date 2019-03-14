@@ -1,0 +1,10 @@
+version: '2.1'
+
+services:
+  redwar:
+    image: redwar
+    build: .
+    environment:
+      NODE_ENV: production
+    ports:
+      - 7001:7001

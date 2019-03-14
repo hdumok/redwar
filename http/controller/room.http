@@ -1,0 +1,4 @@
+@Host = http://172.17.0.2:7001
+
+###
+POST {{Host}}/player/room/list HTTP/1.1

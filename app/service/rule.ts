@@ -1,8 +1,6 @@
 import { Service } from 'egg';
 import { TransactionValue } from '../model/transaction';
 
-import decimal = require('decimal102');
-
 interface PacketItem {
   turns: number;
   award: number;
@@ -12,6 +10,8 @@ export default class RuleService extends Service {
   private store = this.app.redis.clients.get('cache');
   // 分配七个包
   public createPackets(award: number, lei: number, num: number = 7): PacketItem[] {
+    const { ctx } = this;
+
     const array: number[] = [];
     let sum: number = 0;
 
@@ -24,7 +24,7 @@ export default class RuleService extends Service {
     array[num - 1] = award;
 
     for (let i = 0; i < num - 1; i++) {
-      array[i] = decimal((award * array[i]) / sum);
+      array[i] = ctx.helper.decimal((award * array[i]) / sum);
 
       // 首包不能为0
       if (i === 0) {
@@ -33,7 +33,7 @@ export default class RuleService extends Service {
         }
       }
 
-      array[num - 1] = decimal(array[num - 1] - array[i]);
+      array[num - 1] = ctx.helper.decimal(array[num - 1] - array[i]);
     }
 
     return array.map((award, index) => ({
@@ -57,14 +57,16 @@ export default class RuleService extends Service {
   }
 
   public checkPacket(award: number, lei: number): TransactionValue {
+    const { ctx } = this;
+
     let value = TransactionValue.Normal;
 
-    const array = decimal(award)
+    const array = ctx.helper
+      .decimal(award)
       .toFixed(2)
       .replace('.', '')
       .split('');
 
-    // 中雷
     if (String(lei) === array[array.length - 1]) {
       value = TransactionValue.Lei;
     } else if (array.join('') === '001') {

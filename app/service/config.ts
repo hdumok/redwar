@@ -16,6 +16,13 @@ export default class ConfigService extends Service {
     spical: 6.66,
     lei: [ 0, 0, 0, 6.66, 18.88, 66.66, 166.66, 888 ],
   };
+
+  constructor(ctx: Context) {
+    super(ctx);
+
+    // TODO zookeeper实现
+  }
+
   public async getPacketDuration() {
     const config = await this.getCacheConfig('packet_duration');
     if (config) {

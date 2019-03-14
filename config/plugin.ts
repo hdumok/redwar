@@ -33,14 +33,14 @@ const plugin: EggPlugin = {
     enable: true,
     package: 'egg-cache',
   },
-  grpc: {
-    enable: true,
-    package: 'egg-grpc',
-  },
   grpcServer: {
     enable: true,
     package: 'egg-grpc-server',
   },
+  // graphql: {
+  //   enable: true,
+  //   package: 'egg-graphql',
+  // },
 };
 
 export default plugin;

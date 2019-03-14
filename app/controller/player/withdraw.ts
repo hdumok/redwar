@@ -2,7 +2,6 @@ import { Controller } from 'egg';
 import { TransactionAttributes, TransactionType } from '../../model/transaction';
 import { WithdrawAttributes } from '../../model/withdraw';
 
-import decimal = require('decimal102');
 export default class WithdrawController extends Controller {
   /**
    * @api {post} /player/withdraw/submit 提现订单提交
@@ -39,7 +38,7 @@ export default class WithdrawController extends Controller {
       return;
     }
 
-    user.award = decimal(user.award - award);
+    user.award = ctx.helper.decimal(user.award - award);
 
     // 存数据库的订单信息
     let withdraw: WithdrawAttributes = {

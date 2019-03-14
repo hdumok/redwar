@@ -3,7 +3,7 @@ import * as moment from 'moment';
 
 export default {
   // 实际没使用这个函数
-  Decimal(num: number): number {
+  decimal(num: number): number {
     return parseFloat(Number(num).toFixed(2));
   },
 

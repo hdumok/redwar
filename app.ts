@@ -15,10 +15,12 @@ export default app => {
 
     if (app.config.env === 'unittest') {
       app.model.Config.bulkCreate([
-        { id: 1, key: 'packet_duration', value: 60 },
-        { id: 2, key: 'award_present', value: [ 0.08, 0.08, 0.08, 0.06, 0.03, 0.03, 0.03 ] },
+        { key: 'packet_duration', value: 60 },
         {
-          id: 3,
+          key: 'award_present',
+          value: [ 0.08, 0.08, 0.08, 0.06, 0.03, 0.03, 0.03 ],
+        },
+        {
           key: 'award_1030',
           value: {
             spical: 1.11,
@@ -26,7 +28,6 @@ export default app => {
           },
         },
         {
-          id: 4,
           key: 'award_3060',
           value: {
             spical: 6.66,
@@ -35,20 +36,12 @@ export default app => {
         },
       ]);
       app.model.Admin.create({
-        id: 1,
         role: 'admin',
         name: '管理员',
         account: 'admin',
         password: 'e10adc3949ba59abbe56e057f20f883e',
       });
-      app.model.Balance.bulkCreate([
-        { id: 1, award: 100 },
-        { id: 2, award: 200 },
-        { id: 3, award: 300 },
-        { id: 4, award: 400 },
-        { id: 5, award: 500 },
-        { id: 6, award: 600 },
-      ]);
+      app.model.Balance.bulkCreate([{ award: 100 }, { award: 200 }, { award: 300 }, { award: 400 }, { award: 500 }, { award: 600 }]);
       app.model.Room.create({
         name: '红包房间',
         award: 10000,

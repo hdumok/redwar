@@ -68,7 +68,9 @@ export interface PacketInstance extends Sequelize.Instance<PacketAttributes>, Pa
   players: UserInstance[];
 }
 
-interface PacketModel extends Sequelize.Model<PacketInstance, PacketAttributes> {}
+interface PacketModel extends Sequelize.Model<PacketInstance, PacketAttributes> {
+  getPacket(packet_id: string): Promise<PacketInstance | null>;
+}
 
 export default (app: Application) => {
   const model = app.model.define<PacketInstance, PacketAttributes>(
@@ -117,6 +119,23 @@ export default (app: Application) => {
       },
       foreignKey: 'packet_id',
       constraints: false,
+    });
+  };
+
+  model.getPacket = async packet_id => {
+    return app.model.Packet.findByPk(packet_id, {
+      include: [
+        {
+          model: app.model.User,
+          as: 'user',
+          attributes: [ 'id', 'name', 'award' ],
+        },
+        {
+          model: app.model.Room,
+          as: 'room',
+          attributes: [ 'id', 'name', 'award' ],
+        },
+      ],
     });
   };
 

@@ -132,11 +132,11 @@ export default (appInfo: EggAppInfo) => {
 
   config.sequelize = {
     dialect: 'postgres', // support: mysql, mariadb, postgres, mssql
-    database: 'redwar',
+    database: 'postgres',
     host: '127.0.0.1',
     port: 5432,
-    username: 'redwar',
-    password: '12345678',
+    username: 'username',
+    password: 'password',
     timezone: '+08:00', // 东八时区
     dialectOptions: {
       decimalNumbers: true,
@@ -163,16 +163,11 @@ export default (appInfo: EggAppInfo) => {
       },
     },
   };
-  config.grpc = {
-    dir: 'app/grpc',
-    property: 'grpc',
-    loadOpts: {
-      convertFieldsToCamelCase: false,
-    },
-    clientOpts: {},
-    endpoint: 'localhost:7002',
-    timeout: 5000,
-  };
+
+  // config.zookeeper = {
+  //   host: '127.0.0.1',
+  //   port: 2181,
+  // };
 
   config.grpcServer = {
     protoPath: 'app/grpc', // *.proto path
@@ -188,6 +183,21 @@ export default (appInfo: EggAppInfo) => {
       oneofs: true,
     },
   };
+
+  // config.graphql = {
+  //   router: '/graphql',
+  //   // 是否加载到 app 上，默认开启
+  //   app: true,
+  //   // 是否加载到 agent 上，默认关闭
+  //   agent: false,
+  //   // 是否加载开发者工具 graphiql, 默认开启。路由同 router 字段。使用浏览器打开该可见。
+  //   graphiql: true,
+  //   // // graphQL 路由前的拦截器
+  //   // onPreGraphQL: function* (ctx) {},
+  //   // // 开发工具 graphiQL 路由前的拦截器，建议用于做权限操作(如只提供开发者使用)
+  //   // onPreGraphiQL: function* (ctx) {},
+  // };
+
   // the return config will combines to EggAppConfig
   return config;
 };

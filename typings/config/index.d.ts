@@ -7,5 +7,5 @@ import ExportConfigDefault from '../../config/config.default';
 type ConfigDefault = ReturnType<typeof ExportConfigDefault>;
 declare module 'egg' {
   type NewEggAppConfig = ConfigDefault;
-  interface EggAppConfig extends NewEggAppConfig { }
+  interface EggAppConfig extends NewEggAppConfig {}
 }

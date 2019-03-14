@@ -5,5 +5,5 @@ import 'egg';
 import ExtendApplication from '../../../app/extend/application';
 declare module 'egg' {
   type ExtendApplicationType = typeof ExtendApplication;
-  interface Application extends ExtendApplicationType { }
+  interface Application extends ExtendApplicationType {}
 }

@@ -5,5 +5,5 @@ import 'egg';
 import ExtendContext from '../../../app/extend/context';
 declare module 'egg' {
   type ExtendContextType = typeof ExtendContext;
-  interface Context extends ExtendContextType { }
+  interface Context extends ExtendContextType {}
 }

@@ -14,7 +14,7 @@ declare module 'egg' {
   interface IController {
     manage: {
       room: ExportManageRoom;
-    }
+    };
     player: {
       packet: ExportPlayerPacket;
       recharge: ExportPlayerRecharge;
@@ -22,6 +22,6 @@ declare module 'egg' {
       transaction: ExportPlayerTransaction;
       user: ExportPlayerUser;
       withdraw: ExportPlayerWithdraw;
-    }
+    };
   }
 }

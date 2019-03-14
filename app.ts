@@ -49,23 +49,6 @@ export default app => {
     }
   });
 
-  // setTimeout(async () => {
-  //   let result: any;
-  //   try {
-  //     const ctx = app.createAnonymousContext();
-  //     console.log(ctx.grpc.redwar.packet.send);
-  //     result = await ctx.grpc.redwar.packet.send({
-  //       room_id: 1,
-  //       award: 10,
-  //       lei: 5
-  //     },                                         {token: '1545751508516-OfX3FoYi8V07HK2eIqKRZk4NX4oK8mT4'}, {timeout: 3000});
-  //     app.logger.info(result);
-  //   }
-  //   catch (e){
-  //     app.logger.error(e);
-  //   }
-  // },         3000);
-
   app.Sequelize.postgres.DECIMAL.parse = value => {
     return parseFloat(Number(value).toFixed(2));
   };

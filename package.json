@@ -47,7 +47,7 @@
     "egg-view-nunjucks": "^2.2.0",
     "grpc": "^1.17.0",
     "ioredis": "^4.2.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
     "moment": "^2.22.2",
     "pg": "^7.6.1",
     "request": "^2.88.0",
